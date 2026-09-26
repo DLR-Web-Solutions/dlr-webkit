@@ -40,6 +40,12 @@ Refer to CLAUDE.md for core rules.
 - **High File Granularity:** Prefer multiple smaller, well-scoped files over one large file. Break down classes, components, helpers, and types into individual files to keep modules easily readable and navigable.
 - **Centralized Error Handling:** Rely on dedicated server/app middleware (or global error boundaries) to handle exceptions centrally. Avoid writing repetitive inline error checks or `try/catch` blocks inside business/route functions unless local error recovery is strictly required.
 
+## Dependency & Package Management Directives
+
+- **Stable Versions Only:** Always install and specify the latest **stable, LTS (Long Term Support)** versions of packages, libraries, and Docker base images.
+- **Strictly Avoid Unstable Releases:** Never install `alpha`, `beta`, `rc` (release candidate), `canary`, or nightly builds unless explicitly requested by the user.
+- **Explicit Version Pinning:** Ensure package manifest files (`package.json`, `composer.json`, `requirements.txt`, etc.) specify stable semantic version ranges and that lockfiles (`package-lock.json`, `composer.lock`) are updated and committed.
+
 # Claude Code Project Rules
 
 > **Single Source of Truth:** All system rules, coding standards, security directives, git conventions, and automation guidelines are defined in `@.cursorrules`.

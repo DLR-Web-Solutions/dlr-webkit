@@ -21,7 +21,15 @@ These principles are strictly enforced across **all languages and frameworks**:
 
 ---
 
-## 2. PHP & Laravel Standards
+## 2. Dependency & Package Management
+
+- **Stable-First Policy:** Always select stable, production-ready, LTS releases when adding dependencies across all ecosystems (`npm`, `composer`, `pip`, Docker base images).
+- **No Unstable Builds:** Pre-release packages (`alpha`, `beta`, `rc`, `canary`, `dev-main`) are strictly forbidden unless required by explicit user instruction.
+- **Lockfile Enforcement:** Always commit updated lockfiles (`package-lock.json`, `composer.lock`, etc.) after adding or updating dependencies to guarantee deterministic builds across environments.
+
+---
+
+## 3. PHP & Laravel Standards
 
 - **Strict Types:** Always declare strict types at the top of every PHP file: `declare(strict_types=1);`.
 - **PSR-12 Compliance:** Strictly adhere to PSR-12 coding standard conventions.
@@ -31,7 +39,7 @@ These principles are strictly enforced across **all languages and frameworks**:
 
 ---
 
-## 3. JavaScript & TypeScript Standards
+## 4. JavaScript & TypeScript Standards
 
 - **TypeScript First:** Strongly preferred over plain JavaScript. Use strict mode (`"strict": true`).
 - **No `any` Types:** Use explicit interfaces, types, generics, or `unknown` with runtime type narrowing.
@@ -63,7 +71,7 @@ These principles are strictly enforced across **all languages and frameworks**:
 
 ---
 
-## 4. Code Quality & Formatting Enforcement
+## 5. Code Quality & Formatting Enforcement
 
 - **Functions & Components:** Keep functions under 50 lines and components/classes under 150 lines. Extract reusable hooks, sub-components, or helper functions into separate files when logic grows complex.
 - **Early Returns:** Prefer early returns to eliminate deeply nested `if/else` blocks.
