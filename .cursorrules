@@ -1,0 +1,15 @@
+# AI Coding Agent Rules (Cursor / Copilot)
+
+Refer to CLAUDE.md for core rules.
+
+1. Always verify existing types in src/ before creating new ones.
+2. Read `@docs/04-standards/coding-guidelines.md` for formatting and strict TypeScript rules.
+3. Every UI component must be accessible with proper aria-attributes.
+
+- **Module Syntax:** Strictly use ES Module `import`/`export` syntax. CommonJS `require()` is prohibited.
+
+## Docker & Containerization Rules
+
+- Every project must include a production-ready `Dockerfile` and `docker-compose.yml`.
+- **Dynamic Port Mapping:** Never hardcode exposed host ports. Always use `.env` substitutions (e.g., `${APP_PORT}:${CONTAINER_PORT}`).
+- Ensure database ports are also mapped through `${DB_PORT}:5432` to avoid host database collisions during multi-tenant deployments.
