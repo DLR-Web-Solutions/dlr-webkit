@@ -7,6 +7,10 @@ Refer to CLAUDE.md for core rules.
 3. Every UI component must be accessible with proper aria-attributes.
 
 - **Module Syntax:** Strictly use ES Module `import`/`export` syntax. CommonJS `require()` is prohibited.
+- **Validation:** Prefer **Zod** for all JS/TS validation (forms, APIs, env). Derive types with `z.infer`. Never use native HTML/browser constraint validation—forms must use `noValidate` and custom Zod error UI.
+- **ORM:** Use **Prisma** for JS/TS projects; use **Eloquent** for Laravel/PHP projects.
+- **Frontend HTTP:** Use **Axios** (shared instance) for frontend API calls—not raw `fetch`.
+- **UI:** Always implement **mobile-first** layouts (base styles for small screens, then `sm:`/`md:`/`lg:`).
 
 ## Docker & Containerization Rules
 
@@ -31,7 +35,7 @@ Refer to CLAUDE.md for core rules.
 
 - **Security First:** Security is the absolute highest priority on every project. Never trade safety or data integrity for speed or simplicity.
 - **Zero Hardcoded Secrets:** Never hardcode API keys, credentials, tokens, or private certificates in code or config files. Use `.env` variables strictly.
-- **Input Validation & Sanitization:** Validate and sanitize all external inputs, request payloads, URL parameters, and database queries (prevent SQL injection, XSS, and command injection).
+- **Input Validation & Sanitization:** Validate and sanitize all external inputs with **Zod** (JS/TS) or Form Requests (Laravel); never trust client-side checks alone. Prevent SQL injection, XSS, and command injection.
 - **Strict Authorization:** Always enforce server-side authentication and role-based access checks on every protected endpoint and server action—never rely on client-side routing guards alone.
 - **Safe Defaults:** Enforce HTTPS, safe CORS policies, secure HTTP-only cookies, and proper content security policy (CSP) headers out of the box.
 

@@ -14,8 +14,9 @@
 
 ## 2. Input Validation & Data Handling
 
-- **Server-Side Validation:** Always validate incoming request payloads using schemas (e.g., Zod, Yup, or Laravel Request Validation).
-- **SQL Injection Prevention:** Use ORM/Query Builders or parameterized queries. Raw string concatenation in queries is strictly forbidden.
+- **Server-Side Validation:** Always validate incoming request payloads with **Zod** schemas (shared or mirrored on the server). Do not use Yup or ad-hoc validators when Zod is available.
+- **No Native HTML Validation:** Client forms must not depend on browser constraint validation (`required`, `pattern`, etc.). Use `noValidate` and Zod-driven errors instead.
+- **SQL Injection Prevention:** Use the project ORM (**Prisma** for JS/TS, **Eloquent** for Laravel) or parameterized queries. Raw string concatenation in queries is strictly forbidden.
 - **XSS Prevention:** Escape user-generated content before rendering. Sanitize HTML payloads if raw rich text must be displayed.
 
 ---

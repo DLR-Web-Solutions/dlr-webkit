@@ -4,6 +4,8 @@
 
 UI components MUST NEVER consume raw backend API payloads directly. All incoming API responses must pass through an Adapter Layer (Class Entity or Mapper Function) before reaching frontend state or presentation components.
 
+**HTTP Client:** Frontend services must call the API via a shared **Axios** instance (e.g. `api`). Do not use raw `fetch` for application API traffic.
+
 ## Objectives
 
 1. **Shield UI from API Drifts:** Prevents backend schema modifications or key renames from breaking frontend components.

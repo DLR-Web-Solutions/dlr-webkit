@@ -71,7 +71,27 @@ These principles are strictly enforced across **all languages and frameworks**:
 
 ---
 
-## 5. Code Quality & Formatting Enforcement
+## 5. Validation (Zod)
+
+- **Zod First:** Use Zod for all request, form, env, and API payload validation in JS/TS projects.
+- **No Native HTML Validation:** Do not rely on browser constraint validation. Disable it with `noValidate` on forms, and avoid HTML-only checks (`required`, `pattern`, `min`/`max`, `type="email"` as validation, etc.). Surface errors via Zod + accessible UI messaging (`aria-invalid`, `aria-describedby`).
+- **Single Source of Truth:** Prefer shared Zod schemas that can derive TypeScript types via `z.infer<typeof schema>`.
+- **Laravel:** When the backend is Laravel, still prefer Zod on the JS/TS frontend; use Form Requests on the PHP side when needed for server enforcement.
+
+## 6. Data Access (ORM)
+
+- **JS/TS projects:** Use **Prisma** as the ORM. No ad-hoc SQL string building; use the Prisma Client.
+- **Laravel/PHP projects:** Use **Eloquent** (and Query Builder where appropriate). Prefer Eloquent models and relationships over raw queries.
+
+## 7. Frontend HTTP Client
+
+- **Axios Only:** All browser/frontend API calls must go through **Axios** (typically a shared configured instance, e.g. `api`). Do not use `fetch` for application API traffic unless Axios is unavailable for a platform-specific constraint explicitly approved by the user.
+
+## 8. UI Layout
+
+- **Mobile-First:** Write base styles for mobile, then progressive enhancement via Tailwind breakpoints (`sm:`, `md:`, `lg:`). Touch targets, spacing, and navigation must work on small screens first.
+
+## 9. Code Quality & Formatting Enforcement
 
 - **Functions & Components:** Keep functions under 50 lines and components/classes under 150 lines. Extract reusable hooks, sub-components, or helper functions into separate files when logic grows complex.
 - **Early Returns:** Prefer early returns to eliminate deeply nested `if/else` blocks.

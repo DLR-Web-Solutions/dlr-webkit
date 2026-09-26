@@ -25,12 +25,15 @@ Based on their response in Step 1, propose a default user role structure (e.g., 
 
 ### Step 3: Technical Stack & Architecture
 
-Ask about their tech preferences or recommend a stack based on their project needs:
+Ask about their tech preferences or recommend a stack based on their project needs. Apply these **project defaults** unless the user overrides them:
 
 - **Backend:** (e.g., Laravel 11, Next.js API Routes, Express/Node)
 - **Frontend:** (e.g., React, Vue 3, Inertia.js)
 - **Database:** (e.g., PostgreSQL, MySQL, SQLite)
-- **Styling:** (e.g., Tailwind CSS, Shadcn UI)
+- **ORM:** Prisma for JS/TS projects; Eloquent for Laravel/PHP
+- **Validation:** Zod
+- **Frontend HTTP:** Axios
+- **Styling:** Tailwind CSS, Shadcn UI — always **mobile-first**
 
 ### Step 4: Business Rules & Invariants
 
