@@ -9,6 +9,7 @@
 These principles are strictly enforced across **all languages and frameworks**:
 
 - **File Granularity over Monoliths:** **Prefer multiple small, modular files** over large monolithic files. Break down classes, controllers, utilities, components, and schemas into dedicated, well-scoped files to maximize readability and maintainability.
+- **Controllers → Services → Repositories:** Prefer this folder/layer structure. Controllers stay thin; services own business logic; repositories own data access.
 - **Centralized Middleware & Error Handling:** Handle uncaught exceptions and unexpected failures using **centralized middleware or global error boundaries** (e.g., Laravel's exception handler in `bootstrap/app.php` or Express/Next.js middleware). Avoid writing repetitive inline error checks or manual `try/catch` wrapping inside individual functions unless local recovery or custom domain handling is strictly required.
 - **SOLID Design:**
     - **Single Responsibility (SRP):** Keep files, classes, and functions focused on a single responsibility.
@@ -34,7 +35,7 @@ These principles are strictly enforced across **all languages and frameworks**:
 - **Strict Types:** Always declare strict types at the top of every PHP file: `declare(strict_types=1);`.
 - **PSR-12 Compliance:** Strictly adhere to PSR-12 coding standard conventions.
 - **Explicit Type Hints:** Define explicit parameter and return type hints on all class methods, controller actions, and helper functions.
-- **Thin Controllers & Action Classes:** Keep controllers thin. Delegate business logic to dedicated Service or Action classes (e.g., `app/Actions/CreateUserAction.php`).
+- **Thin Controllers:** Keep controllers thin. Delegate business logic to **Services** and data access to **Repositories** (e.g., `app/Services/CreateUserService.php`, `app/Repositories/UserRepository.php`).
 - **Exception Flow:** Throw typed domain exceptions and let framework exception handlers capture and format response payloads centrally.
 
 ---
@@ -90,6 +91,8 @@ These principles are strictly enforced across **all languages and frameworks**:
 ## 8. UI Layout
 
 - **Mobile-First:** Write base styles for mobile, then progressive enhancement via Tailwind breakpoints (`sm:`, `md:`, `lg:`). Touch targets, spacing, and navigation must work on small screens first.
+- **Granular UI:** Every UI surface must be composed of small, single-purpose components. Do not ship large monolithic page/view files—split layout, sections, forms, fields, and interactive pieces into dedicated components.
+- **Loading Components:** Always include a loading state when async work can delay feedback (page/data load, form submit, button actions). Prefer dedicated reusable loading/skeleton components; wire `aria-busy` / polite status text where appropriate.
 
 ## 9. Code Quality & Formatting Enforcement
 

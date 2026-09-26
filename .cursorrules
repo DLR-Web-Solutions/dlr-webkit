@@ -9,8 +9,9 @@ Refer to CLAUDE.md for core rules.
 - **Module Syntax:** Strictly use ES Module `import`/`export` syntax. CommonJS `require()` is prohibited.
 - **Validation:** Prefer **Zod** for all JS/TS validation (forms, APIs, env). Derive types with `z.infer`. Never use native HTML/browser constraint validation—forms must use `noValidate` and custom Zod error UI.
 - **ORM:** Use **Prisma** for JS/TS projects; use **Eloquent** for Laravel/PHP projects.
+- **Architecture:** Prefer **controllers / services / repositories** folder structure (thin controllers → services → repositories).
 - **Frontend HTTP:** Use **Axios** (shared instance) for frontend API calls—not raw `fetch`.
-- **UI:** Always implement **mobile-first** layouts (base styles for small screens, then `sm:`/`md:`/`lg:`).
+- **UI:** Always implement **mobile-first** layouts. All UIs must be **granular**—small, single-purpose components; no monolithic pages/views. Always provide a **loading component/state** whenever async work can leave the user waiting.
 
 ## Docker & Containerization Rules
 
@@ -42,6 +43,8 @@ Refer to CLAUDE.md for core rules.
 ## File Structure & Error Handling Directives
 
 - **High File Granularity:** Prefer multiple smaller, well-scoped files over one large file. Break down classes, components, helpers, and types into individual files to keep modules easily readable and navigable.
+- **Layered Backend:** Prefer `controllers/`, `services/`, and `repositories/` (or framework equivalents). Controllers are thin; services hold business logic; repositories handle data access.
+- **Granular UI:** Compose every screen from small, single-responsibility components—never monolithic page/view files.
 - **Centralized Error Handling:** Rely on dedicated server/app middleware (or global error boundaries) to handle exceptions centrally. Avoid writing repetitive inline error checks or `try/catch` blocks inside business/route functions unless local error recovery is strictly required.
 
 ## Dependency & Package Management Directives

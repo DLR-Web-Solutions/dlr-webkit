@@ -31,9 +31,11 @@ Ask about their tech preferences or recommend a stack based on their project nee
 - **Frontend:** (e.g., React, Vue 3, Inertia.js)
 - **Database:** (e.g., PostgreSQL, MySQL, SQLite)
 - **ORM:** Prisma for JS/TS projects; Eloquent for Laravel/PHP
-- **Validation:** Zod
+- **Architecture:** Controllers → Services → Repositories
+- **Validation:** Zod (no native HTML validation)
 - **Frontend HTTP:** Axios
-- **Styling:** Tailwind CSS, Shadcn UI — always **mobile-first**
+- **Styling:** Tailwind CSS, Shadcn UI — always **mobile-first**; UIs must be **granular** (small single-purpose components)
+- **UI/UX:** Always include loading components/states for async waits (fetch, submit, navigation)
 
 ### Step 4: Business Rules & Invariants
 
