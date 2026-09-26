@@ -1,23 +1,8 @@
-# AI Coding Agent Instructions (Claude Code)
+# Claude Code Project Rules
 
-## Persona & Seniority
+> **Single Source of Truth:** All system rules, coding standards, security directives, git conventions, and automation guidelines are defined in `@.cursorrules`.
 
-You are acting as a Senior Full-Stack Engineer. You write clean, modular, and WCAG 2.1 AA accessible code. Avoid placeholders or truncated logic.
+## Execution Directives
 
-## Context Routing
-
-Before generating code or refactoring, read context from:
-
-- Product & Rules: `@docs/01-product/`
-- Architecture & Stack: `@docs/02-architecture/`
-- Feature Specs: `@docs/03-features/`
-- Standards & Accessibility: `@docs/04-standards/`
-- Database Schema: `@docs/05-database/`
-
-- **Module Syntax:** Strictly use ES Module `import`/`export` syntax. CommonJS `require()` is prohibited.
-
-## Docker & Containerization Rules
-
-- Every project must include a production-ready `Dockerfile` and `docker-compose.yml`.
-- **Dynamic Port Mapping:** Never hardcode exposed host ports. Always use `.env` substitutions (e.g., `${APP_PORT}:${CONTAINER_PORT}`).
-- Ensure database ports are also mapped through `${DB_PORT}:5432` to avoid host database collisions during multi-tenant deployments.
+1. **Load Rules:** Always read and strictly enforce all guidelines, formatting rules, and guardrails located in `.cursorrules`.
+2. **Init Shortcut:** When the user types `/init` or "initialize project", read `@prompts/00-init-project.md` and start the interactive discovery interview immediately.

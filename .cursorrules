@@ -13,3 +13,38 @@ Refer to CLAUDE.md for core rules.
 - Every project must include a production-ready `Dockerfile` and `docker-compose.yml`.
 - **Dynamic Port Mapping:** Never hardcode exposed host ports. Always use `.env` substitutions (e.g., `${APP_PORT}:${CONTAINER_PORT}`).
 - Ensure database ports are also mapped through `${DB_PORT}:5432` to avoid host database collisions during multi-tenant deployments.
+
+## Special Commands
+
+- When the user types `/init` or "initialize project", read `@prompts/00-init-project.md` and start the interactive discovery interview immediately.
+
+## Automatic Workflow Codification
+
+- **Detect Repeatable Tasks:** When executing a multi-step terminal process or complex setup flow that is likely to be repeated in the future (e.g., DB seed resets, cache purges, mock data generation, environment setup):
+    1. **Create a Script:** Write a clean, modular Bash script inside the `bin/` directory (e.g., `bin/seed-test-tenant.sh`).
+    2. **Make it Executable:** Run `chmod +x bin/script-name.sh`.
+    3. **Document It:** Add the script description and usage command to `docs/04-standards/automation.md`.
+    4. **Execute Script:** Run the newly created script instead of performing manual commands.
+- **Check Scripts First:** Before running multi-command workflows, check `docs/04-standards/automation.md` or `bin/` to see if a script already exists for that task.
+
+## Security Directives (Priority #1)
+
+- **Security First:** Security is the absolute highest priority on every project. Never trade safety or data integrity for speed or simplicity.
+- **Zero Hardcoded Secrets:** Never hardcode API keys, credentials, tokens, or private certificates in code or config files. Use `.env` variables strictly.
+- **Input Validation & Sanitization:** Validate and sanitize all external inputs, request payloads, URL parameters, and database queries (prevent SQL injection, XSS, and command injection).
+- **Strict Authorization:** Always enforce server-side authentication and role-based access checks on every protected endpoint and server action—never rely on client-side routing guards alone.
+- **Safe Defaults:** Enforce HTTPS, safe CORS policies, secure HTTP-only cookies, and proper content security policy (CSP) headers out of the box.
+
+## File Structure & Error Handling Directives
+
+- **High File Granularity:** Prefer multiple smaller, well-scoped files over one large file. Break down classes, components, helpers, and types into individual files to keep modules easily readable and navigable.
+- **Centralized Error Handling:** Rely on dedicated server/app middleware (or global error boundaries) to handle exceptions centrally. Avoid writing repetitive inline error checks or `try/catch` blocks inside business/route functions unless local error recovery is strictly required.
+
+# Claude Code Project Rules
+
+> **Single Source of Truth:** All system rules, coding standards, security directives, git conventions, and automation guidelines are defined in `@.cursorrules`.
+
+## Execution Directives
+
+1. **Load Rules:** Always read and strictly enforce all guidelines, formatting rules, and guardrails located in `.cursorrules`.
+2. **Init Shortcut:** When the user types `/init` or "initialize project", read `@prompts/00-init-project.md` and start the interactive discovery interview immediately.
