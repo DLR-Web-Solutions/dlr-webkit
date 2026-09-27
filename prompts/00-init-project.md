@@ -32,7 +32,7 @@ Ask about their tech preferences or recommend a stack based on their project nee
 - **Database:** (e.g., PostgreSQL, MySQL, SQLite)
 - **ORM:** Prisma for JS/TS projects; Eloquent for Laravel/PHP
 - **Architecture:** Controllers → Services → Repositories
-- **Validation:** Zod (no native HTML validation)
+- **Validation:** Zod (no native HTML validation); React forms → **react-hook-form** + Zod
 - **Frontend HTTP:** Axios
 - **Styling:** Tailwind CSS, Shadcn UI — always **mobile-first**; UIs must be **granular** (small single-purpose components)
 - **UI/UX:** Always include loading components/states for async waits (fetch, submit, navigation)

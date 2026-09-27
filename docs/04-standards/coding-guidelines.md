@@ -75,6 +75,7 @@ These principles are strictly enforced across **all languages and frameworks**:
 ## 5. Validation (Zod)
 
 - **Zod First:** Use Zod for all request, form, env, and API payload validation in JS/TS projects.
+- **React Forms:** When the frontend is React, always use **react-hook-form** (typically with `@hookform/resolvers/zod`) for form state and submission. Do not manage form fields with ad-hoc `useState` for standard form flows.
 - **No Native HTML Validation:** Do not rely on browser constraint validation. Disable it with `noValidate` on forms, and avoid HTML-only checks (`required`, `pattern`, `min`/`max`, `type="email"` as validation, etc.). Surface errors via Zod + accessible UI messaging (`aria-invalid`, `aria-describedby`).
 - **Single Source of Truth:** Prefer shared Zod schemas that can derive TypeScript types via `z.infer<typeof schema>`.
 - **Laravel:** When the backend is Laravel, still prefer Zod on the JS/TS frontend; use Form Requests on the PHP side when needed for server enforcement.

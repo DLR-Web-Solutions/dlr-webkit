@@ -4,7 +4,7 @@
 - Database: PostgreSQL / MySQL
 - ORM: Prisma (JS/TS) / Eloquent (Laravel)
 - Architecture: Controllers → Services → Repositories
-- Validation: Zod (no native HTML validation)
+- Validation: Zod (no native HTML validation); React → react-hook-form + Zod
 - Frontend HTTP: Axios
 - Styling: Tailwind CSS + Radix UI / Shadcn (mobile-first, granular UI)
 - UI/UX: Loading states required for async waits

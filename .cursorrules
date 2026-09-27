@@ -7,7 +7,7 @@ Refer to CLAUDE.md for core rules.
 3. Every UI component must be accessible with proper aria-attributes.
 
 - **Module Syntax:** Strictly use ES Module `import`/`export` syntax. CommonJS `require()` is prohibited.
-- **Validation:** Prefer **Zod** for all JS/TS validation (forms, APIs, env). Derive types with `z.infer`. Never use native HTML/browser constraint validation—forms must use `noValidate` and custom Zod error UI.
+- **Validation:** Prefer **Zod** for all JS/TS validation (forms, APIs, env). Derive types with `z.infer`. Never use native HTML/browser constraint validation—forms must use `noValidate` and custom Zod error UI. React frontends must use **react-hook-form** (with Zod resolvers).
 - **ORM:** Use **Prisma** for JS/TS projects; use **Eloquent** for Laravel/PHP projects.
 - **Architecture:** Prefer **controllers / services / repositories** folder structure (thin controllers → services → repositories).
 - **Frontend HTTP:** Use **Axios** (shared instance) for frontend API calls—not raw `fetch`.
