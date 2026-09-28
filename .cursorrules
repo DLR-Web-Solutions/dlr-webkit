@@ -12,6 +12,7 @@ Refer to CLAUDE.md for core rules.
 - **Architecture:** Prefer **controllers / services / repositories** folder structure (thin controllers → services → repositories).
 - **Frontend HTTP:** Use **Axios** (shared instance) for frontend API calls—not raw `fetch`.
 - **UI:** Always implement **mobile-first** layouts. All UIs must be **granular**—small, single-purpose components; no monolithic pages/views. Always provide a **loading component/state** whenever async work can leave the user waiting.
+- **Pre-commit:** JS/TS projects must use **Husky** + **lint-staged** (see `.lintstagedrc.json` and `.husky/pre-commit`). Never skip with `--no-verify` unless the user asks.
 
 ## Docker & Containerization Rules
 

@@ -54,7 +54,31 @@ refactor(users): extract full name formatting into User entity getter
 
 ---
 
-## 3. AI Agent Git Execution Rules
+## 3. Pre-Commit Hooks (Husky + lint-staged)
+
+JS/TS projects **must** use **Husky** + **lint-staged** so only staged files are checked/fixed before each commit.
+
+1. Install as devDependencies: `husky`, `lint-staged`, plus `eslint` / `prettier` (and `typescript-eslint` as needed).
+2. Enable Husky (`npx husky init` or `prepare` script: `"prepare": "husky"`).
+3. `.husky/pre-commit` must run:
+
+```sh
+npx lint-staged
+```
+
+4. Provide `.lintstagedrc.json` (kit default—preferred over a `package.json` key). Typical rules:
+
+| Glob | Commands |
+| :--- | :--- |
+| `*.{js,jsx,ts,tsx,mjs,cjs}` | `eslint --fix`, `prettier --write` |
+| `*.{json,md,yml,yaml,css,scss,html}` | `prettier --write` |
+| `*.php` (Laravel) | `./vendor/bin/pint` |
+
+Agents scaffolding a new app must set this up; never skip hooks with `--no-verify` unless the user explicitly requests it.
+
+---
+
+## 4. AI Agent Git Execution Rules
 
 - Before creating a new branch or executing `git checkout -b`, verify the branch name against these guidelines.
 - When generating commit messages or committing code autonomously, strictly use the Conventional Commits format above.

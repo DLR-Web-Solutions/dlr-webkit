@@ -34,6 +34,15 @@ echo "🚀 Copying AI DevKit files to parent directory..."
 [ -f "$DEVKIT_DIR/CLAUDE.md" ] && cp "$DEVKIT_DIR/CLAUDE.md" "$PARENT_DIR/"
 [ -f "$DEVKIT_DIR/.cursorrules" ] && cp "$DEVKIT_DIR/.cursorrules" "$PARENT_DIR/"
 
+# Tooling / quality defaults
+[ -f "$DEVKIT_DIR/eslint.config.js" ] && cp "$DEVKIT_DIR/eslint.config.js" "$PARENT_DIR/"
+[ -f "$DEVKIT_DIR/.prettierrc" ] && cp "$DEVKIT_DIR/.prettierrc" "$PARENT_DIR/"
+[ -f "$DEVKIT_DIR/.lintstagedrc.json" ] && cp "$DEVKIT_DIR/.lintstagedrc.json" "$PARENT_DIR/"
+if [ -d "$DEVKIT_DIR/.husky" ]; then
+  mkdir -p "$PARENT_DIR/.husky"
+  cp -R "$DEVKIT_DIR/.husky/"* "$PARENT_DIR/.husky/" 2>/dev/null || true
+fi
+
 if [ -d "$DEVKIT_DIR/.github" ]; then
   mkdir -p "$PARENT_DIR/.github"
   cp -R "$DEVKIT_DIR/.github/"* "$PARENT_DIR/.github/" 2>/dev/null || true

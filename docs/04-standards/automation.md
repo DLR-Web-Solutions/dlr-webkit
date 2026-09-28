@@ -9,7 +9,22 @@
 | Script Path        | Description                                                    | When to Run               |
 | :----------------- | :------------------------------------------------------------- | :------------------------ |
 | `bin/install.sh`   | Overlays `dlr-webkit` into parent directory and self-destructs | Initial project bootstrap |
-| `bin/init-docs.sh` | Interactive CLI context gatherer for project docs              | First-time setup          |
+| `bin/init.sh`      | Interactive CLI context gatherer for project docs              | First-time setup          |
+
+---
+
+## Required Repo Tooling (JS/TS)
+
+When scaffolding or bootstrapping a JS/TS app from this kit, ensure:
+
+| Piece | Purpose |
+| :---- | :------ |
+| `husky` | Git hooks |
+| `lint-staged` | Run linters/formatters on staged files only |
+| `.husky/pre-commit` | Runs `npx lint-staged` |
+| `.lintstagedrc.json` | Maps globs → `eslint` / `prettier` / `pint` (preferred over `package.json`) |
+
+Install with: `npm install -D husky lint-staged` and `"prepare": "husky"` in `package.json`.
 
 ---
 

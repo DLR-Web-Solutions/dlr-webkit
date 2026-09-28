@@ -100,4 +100,5 @@ These principles are strictly enforced across **all languages and frameworks**:
 - **Functions & Components:** Keep functions under 50 lines and components/classes under 150 lines. Extract reusable hooks, sub-components, or helper functions into separate files when logic grows complex.
 - **Early Returns:** Prefer early returns to eliminate deeply nested `if/else` blocks.
 - **Defensive Defaults:** Use nullish coalescing (`??`) and optional chaining (`?.`) instead of logical OR (`||`) when evaluating potentially missing values.
-- **Pre-Commit Rule:** Always run linting and code formatting tools (`npm run lint`, `./vendor/bin/pint`, or `./vendor/bin/phpcs`) prior to committing to ensure compliance.
+- **lint-staged + Husky (required for JS/TS):** Every JS/TS project must install `husky` and `lint-staged`, wire `.husky/pre-commit` to `npx lint-staged`, and ship `.lintstagedrc.json` (preferred over embedding config in `package.json`). Staged files are linted/formatted on commit—do not rely on manual `npm run lint` alone.
+- **Pre-Commit Rule:** Always run linting and code formatting tools via lint-staged on commit (`eslint`/`prettier` for JS/TS; `./vendor/bin/pint` for PHP when present).

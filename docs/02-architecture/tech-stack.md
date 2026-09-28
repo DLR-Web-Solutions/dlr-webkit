@@ -8,3 +8,4 @@
 - Frontend HTTP: Axios
 - Styling: Tailwind CSS + Radix UI / Shadcn (mobile-first, granular UI)
 - UI/UX: Loading states required for async waits
+- Tooling: Husky + lint-staged (pre-commit)

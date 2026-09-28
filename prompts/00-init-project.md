@@ -36,6 +36,7 @@ Ask about their tech preferences or recommend a stack based on their project nee
 - **Frontend HTTP:** Axios
 - **Styling:** Tailwind CSS, Shadcn UI — always **mobile-first**; UIs must be **granular** (small single-purpose components)
 - **UI/UX:** Always include loading components/states for async waits (fetch, submit, navigation)
+- **Tooling:** Husky + lint-staged on pre-commit (eslint/prettier; pint for PHP)
 
 ### Step 4: Business Rules & Invariants
 
