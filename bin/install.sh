@@ -119,8 +119,8 @@ echo "Next: copy .env.example → .env, run bun install, then bun run doctor."
 
 DEVKIT_FOLDER_NAME="$(basename "$DEVKIT_DIR")"
 echo "------------------------------------------"
-read -r -p "Remove the nested '$DEVKIT_FOLDER_NAME' folder now? (Y/n): " REMOVE_DEVKIT
-REMOVE_DEVKIT="${REMOVE_DEVKIT:-Y}"
+read -r -p "Remove the nested '$DEVKIT_FOLDER_NAME' folder now? (y/N): " REMOVE_DEVKIT
+REMOVE_DEVKIT="${REMOVE_DEVKIT:-N}"
 
 if [[ "$REMOVE_DEVKIT" =~ ^[Yy]$ ]]; then
   echo "🧹 Cleaning up $DEVKIT_FOLDER_NAME..."
