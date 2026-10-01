@@ -59,20 +59,20 @@ refactor(users): extract full name formatting into User entity getter
 JS/TS projects **must** use **Husky** + **lint-staged** so only staged files are checked/fixed before each commit.
 
 1. Install as devDependencies: `husky`, `lint-staged`, plus `eslint` / `prettier` (and `typescript-eslint` as needed).
-2. Enable Husky (`npx husky init` or `prepare` script: `"prepare": "husky"`).
+2. Enable Husky (`bunx husky init` or `prepare` script: `"prepare": "husky"`).
 3. `.husky/pre-commit` must run:
 
 ```sh
-npx lint-staged
+bunx lint-staged
 ```
 
 4. Provide `.lintstagedrc.json` (kit default—preferred over a `package.json` key). Typical rules:
 
-| Glob | Commands |
-| :--- | :--- |
-| `*.{js,jsx,ts,tsx,mjs,cjs}` | `eslint --fix`, `prettier --write` |
-| `*.{json,md,yml,yaml,css,scss,html}` | `prettier --write` |
-| `*.php` (Laravel) | `./vendor/bin/pint` |
+| Glob                                 | Commands                           |
+| :----------------------------------- | :--------------------------------- |
+| `*.{js,jsx,ts,tsx,mjs,cjs}`          | `eslint --fix`, `prettier --write` |
+| `*.{json,md,yml,yaml,css,scss,html}` | `prettier --write`                 |
+| `*.php` (Laravel)                    | `./vendor/bin/pint`                |
 
 Agents scaffolding a new app must set this up; never skip hooks with `--no-verify` unless the user explicitly requests it.
 

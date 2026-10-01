@@ -33,8 +33,8 @@ UI components MUST NEVER consume raw backend API payloads directly. All incoming
 export class User {
     constructor(data = {}) {
         this.id = data.id ?? null;
-        this.firstName = data.first_name || "<not given>";
-        this.lastName = data.last_name || "";
+        this.firstName = data.first_name || '<not given>';
+        this.lastName = data.last_name || '';
         this.birthDate = data.birth_date ? new Date(data.birth_date) : null;
     }
 
@@ -91,7 +91,7 @@ console.log(user.fullName); // "Josh Dolor"
 ### Collection Adapter Definition
 
 ```javascript
-import { User } from "./User.js";
+import { User } from './User.js';
 
 export class UserCollection {
     constructor(payload = {}) {

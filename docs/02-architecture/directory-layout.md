@@ -23,6 +23,8 @@ src/server/
   controllers/     # HTTP / route handlers only (thin)
   services/        # Business logic & orchestration
   repositories/    # Data access (Prisma / Eloquent / DB)
+  ai/              # Optional: prompts, provider adapters (AI apps only)
+  jobs/            # Optional: async workers
 ```
 
 - **Controllers:** Parse input, call a service, return the response. No business rules or queries.
@@ -30,3 +32,9 @@ src/server/
 - **Repositories:** Persist and fetch data via the ORM. No HTTP concerns.
 
 When a layer folder fills with related peers, nest by domain (e.g. `repositories/billing/…`). Adapt names to the framework if needed, but keep the three-layer split under `src/<surface>/`.
+
+## Related architecture notes
+
+- AI providers: `docs/02-architecture/ai-providers.md`
+- Jobs / webhooks: `docs/02-architecture/async-jobs-webhooks.md`
+- SaaS extension: `docs/02-architecture/saas-extension.md`
