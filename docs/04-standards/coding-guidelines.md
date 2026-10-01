@@ -27,8 +27,8 @@ These principles are strictly enforced across **all languages and frameworks**:
 ## 2. Dependency & Package Management
 
 - **Bun for JS/TS:** Full-stack JavaScript/TypeScript projects must use **Bun** as the runtime and package manager (`bun install`, `bun run`, `bunx`). Do not use npm, yarn, or pnpm unless explicitly requested.
-- **Lockfile is truth:** Prefer versions already declared in `package.json` / `bun.lock` (or `composer.lock`). Upgrade deliberately and run `bun run verify`.
-- **Stable when adding:** New dependencies must be current **stable** releases (no alpha/beta/rc/canary unless the user asks). Do not use `@latest`.
+- **Lockfile is truth:** Prefer versions already declared in `package.json` / `bun.lock` (or `composer.lock`). Upgrade deliberately, check compatibility, and run `bun run verify`.
+- **When adding a dependency:** Pick an explicit **stable** version (no alpha/beta/rc/canary/`@latest` unless the user asks), update the lockfile, and verify. Do not chase “newest” for its own sake.
 - **Lockfile Enforcement:** Always commit updated lockfiles after adding or updating dependencies.
 
 ---

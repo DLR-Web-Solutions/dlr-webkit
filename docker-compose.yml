@@ -1,3 +1,7 @@
+# Optional local stack. Use only when the project benefits from containers
+# (database, workers, or containerized deploy). Do not add Compose merely to
+# satisfy a rule — omit this file for simple apps that run on the host.
+
 services:
     app:
         build:
@@ -15,11 +19,18 @@ services:
             db:
                 condition: service_healthy
         healthcheck:
-            test: ['CMD', 'bun', '--version']
+            # Probes the app HTTP /health endpoint (not a runtime version flag).
+            test:
+                [
+                    'CMD',
+                    'bun',
+                    '-e',
+                    "const r=await fetch('http://127.0.0.1:'+(process.env.PORT||8000)+'/health'); if(!r.ok) process.exit(1)",
+                ]
             interval: 30s
             timeout: 5s
             retries: 3
-            start_period: 10s
+            start_period: 15s
 
     db:
         image: postgres:16-alpine
@@ -29,7 +40,8 @@ services:
         environment:
             POSTGRES_DB: ${DB_DATABASE:-app_db}
             POSTGRES_USER: ${DB_USERNAME:-postgres}
-            POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+            # Required — no default password. Set DB_PASSWORD in .env (see .env.example).
+            POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env — do not use compose defaults for secrets}
         volumes:
             - postgres_data:/var/lib/postgresql/data
         healthcheck:

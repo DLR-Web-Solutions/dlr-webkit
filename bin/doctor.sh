@@ -147,6 +147,14 @@ if [ -f docker-compose.yml ]; then
   else
     warn "prefer \${APP_PORT}/\${DB_PORT} for host port mappings"
   fi
+  if grep -vE '^\s*#' docker-compose.yml | grep -qE -- '--version'; then
+    bad "app healthcheck must not use a runtime --version flag — probe HTTP /health"
+  fi
+  if grep -qE 'PASSWORD:-\s*secret|PASSWORD:-secret' docker-compose.yml; then
+    bad "compose must not default DB passwords to 'secret' — require DB_PASSWORD from .env"
+  elif grep -qE 'DB_PASSWORD:\?|POSTGRES_PASSWORD: \$\{DB_PASSWORD' docker-compose.yml; then
+    ok "compose requires DB_PASSWORD from environment"
+  fi
   if command -v docker >/dev/null 2>&1; then
     ok "docker CLI available"
     if docker info >/dev/null 2>&1; then

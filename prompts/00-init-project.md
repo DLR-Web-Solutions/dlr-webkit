@@ -34,10 +34,10 @@ Recommend or confirm stack. **Kit defaults** unless overridden:
 - **Frontend HTTP:** Axios (**default**)
 - **Architecture:** Controllers → Services → Repositories (**default**); domain-nest folders when crowded
 - **Tooling:** Husky + lint-staged; `bun run doctor` + `bun run verify`
-- **Containers:** Docker Compose **recommended** when deploying/containerizing
-- **AI apps (only if needed):** Provider abstraction + structured output + Zod (see `docs/02-architecture/ai-providers.md`)
-- **SaaS:** Design for users/roles now; multi-tenant only if the user requires it—do not force tenancy
-- **Versions:** Prefer lockfile versions; never instruct `@latest`
+- **Containers:** Docker Compose **only when useful** (DB/workers/deploy)—never solely for a rule
+- **AI apps (only if needed):** Provider abstraction + structured output + Zod (`docs/02-architecture/ai-providers.md`)
+- **SaaS:** Users/roles now; multi-tenant only if requested—do not force tenancy
+- **Versions:** Prefer lockfile versions; deliberate upgrades; never instruct `@latest`
 
 ### Step 4: Auth, Data & Constraints
 
@@ -45,7 +45,7 @@ Ask about authentication preference, must-have business rules, and whether soft 
 
 ### Step 5: Testing & Deployment Expectations
 
-Confirm: unit+integration tests (Vitest or Bun test / Pest), Playwright for critical UI flows, Docker Compose deploy.
+Confirm: unit+integration tests (Vitest or Bun test / Pest), Playwright for critical UI flows, and whether Docker Compose is actually needed.
 
 ### Step 6: Document Generation
 

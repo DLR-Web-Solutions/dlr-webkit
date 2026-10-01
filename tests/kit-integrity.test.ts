@@ -26,4 +26,47 @@ describe('kit integrity', () => {
         expect(pkg.scripts.verify).toContain('verify');
         expect(pkg.packageManager).toMatch(/^bun@/);
     });
+
+    test('compose does not default DB password to secret or use version-flag healthcheck', async () => {
+        const compose = await Bun.file(join(root, 'docker-compose.yml')).text();
+        const withoutComments = compose
+            .split('\n')
+            .filter((line) => !/^\s*#/.test(line))
+            .join('\n');
+        expect(withoutComments).not.toMatch(
+            /DB_PASSWORD:-\s*secret|POSTGRES_PASSWORD:-\s*secret/,
+        );
+        expect(withoutComments).not.toMatch(/--version/);
+        expect(compose).toContain('/health');
+        expect(compose).toMatch(/DB_PASSWORD:\?/);
+    });
+
+    test('health template responds on /health', async () => {
+        const port = 18765;
+        const proc = Bun.spawn(['bun', 'src/server/health.ts'], {
+            cwd: root,
+            env: { ...process.env, PORT: String(port) },
+            stdout: 'ignore',
+            stderr: 'ignore',
+        });
+        try {
+            let ok = false;
+            for (let i = 0; i < 20; i++) {
+                await Bun.sleep(50);
+                try {
+                    const res = await fetch(`http://127.0.0.1:${port}/health`);
+                    if (res.ok) {
+                        ok = true;
+                        break;
+                    }
+                } catch {
+                    // not ready yet
+                }
+            }
+            expect(ok).toBe(true);
+        } finally {
+            proc.kill();
+            await proc.exited;
+        }
+    });
 });

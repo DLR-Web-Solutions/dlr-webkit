@@ -63,7 +63,7 @@
 
 ## Deployment
 
-- Docker Compose with dynamic `${APP_PORT}` / `${DB_PORT}`
+- Docker Compose when the architecture needs it (dynamic `${APP_PORT}` / `${DB_PORT}`); HTTP `/health` for app liveness
 - Health: `/health` (liveness), `/ready` (dependencies) when implemented
 
 ## AI (if this product uses LLMs)

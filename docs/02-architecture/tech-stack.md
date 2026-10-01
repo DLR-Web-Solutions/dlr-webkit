@@ -15,5 +15,5 @@
 - UI/UX: Loading states required for async waits
 - Testing: Bun test or Vitest; Playwright for critical E2E
 - Tooling: Husky + lint-staged; `bun run doctor` + `bun run verify`
-- Containers: Docker Compose **recommended** for deployable apps (dynamic `${APP_PORT}` / `${DB_PORT}`)
+- Containers: Docker Compose **conditional** (only when DB/workers/container deploy help)
 - AI (optional): Provider interface + Zod-validated structured output

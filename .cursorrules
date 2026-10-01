@@ -43,7 +43,7 @@ UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW →
 | Controllers → services → repositories | **Default** for backends | Adapt names to the framework; keep the separation |
 | Prisma (JS/TS) / Eloquent (Laravel) | **Default** ORM | Override only with a documented reason |
 | Axios (browser API client) | **Default** | Shared instance; avoid raw `fetch` for app APIs unless constrained |
-| Docker Compose + Dockerfile | **Recommended** for deployable apps | If compose builds an image, Dockerfile is required; dynamic `${APP_PORT}` / `${DB_PORT}` |
+| Docker Compose + Dockerfile | **Conditional** | Use when DB/workers/container deploy help; never add Compose only to satisfy a rule. If compose **builds** an image, ship Dockerfile + HTTP `/health` probe (not `bun --version`) |
 | Husky + lint-staged | **Required** for JS/TS | `.husky/pre-commit` → `bunx lint-staged` |
 | Mobile-first granular UI + loading states | **Required** for UI work | a11y attributes on interactive UI |
 
@@ -58,10 +58,10 @@ UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW →
 
 ## Versions & dependencies
 
-> Prefer versions already declared by the project and lockfile. Upgrade deliberately and verify with `bun run verify`.
+> Prefer versions already declared by the project and lockfile. Upgrade deliberately, check compatibility, and verify with `bun run verify`.
 
-- When **adding** a dependency: choose a current **stable** release (no alpha/beta/rc/canary unless the user asks), pin a sensible range, update the lockfile.
-- When **changing** an existing dependency: bump intentionally, read changelogs, run verify.
+- When **adding** a dependency: choose an explicit **stable** release (no alpha/beta/rc/canary/`@latest` unless the user asks), pin a sensible range, update the lockfile.
+- When **changing** an existing dependency: bump intentionally, check compatibility, run verify.
 - Never use `@latest` in docs, MCP configs, Docker tags for app deps, or agent instructions.
 - Prefer fewer dependencies; do not add a package if the runtime or an existing dep already solves it.
 

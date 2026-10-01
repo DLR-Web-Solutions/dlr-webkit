@@ -74,4 +74,4 @@ Workflow: `UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY →
 
 ## Versions
 
-Prefer lockfile / declared versions. Upgrade deliberately; never instruct `@latest`.
+Prefer lockfile / declared versions. Upgrade deliberately with compatibility checks; never instruct `@latest`.
