@@ -31,5 +31,5 @@
 
 ## 4. Dependencies & Third-Party Code
 
-- **Audit Regularly:** Run `npm audit` or equivalent dependency security scans prior to production deployments.
+- **Audit Regularly:** Run `bun audit` (or equivalent) dependency security scans prior to production deployments.
 - **Minimize Dependencies:** Avoid installing single-function packages to reduce supply-chain attack surfaces.

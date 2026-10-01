@@ -21,10 +21,10 @@ When scaffolding or bootstrapping a JS/TS app from this kit, ensure:
 | :---- | :------ |
 | `husky` | Git hooks |
 | `lint-staged` | Run linters/formatters on staged files only |
-| `.husky/pre-commit` | Runs `npx lint-staged` |
+| `.husky/pre-commit` | Runs `bunx lint-staged` |
 | `.lintstagedrc.json` | Maps globs → `eslint` / `prettier` / `pint` (preferred over `package.json`) |
 
-Install with: `npm install -D husky lint-staged` and `"prepare": "husky"` in `package.json`.
+Install with: `bun add -d husky lint-staged` and `"prepare": "husky"` in `package.json`.
 
 ---
 

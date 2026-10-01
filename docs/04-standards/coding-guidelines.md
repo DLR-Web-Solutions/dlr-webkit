@@ -24,9 +24,10 @@ These principles are strictly enforced across **all languages and frameworks**:
 
 ## 2. Dependency & Package Management
 
-- **Stable-First Policy:** Always select stable, production-ready, LTS releases when adding dependencies across all ecosystems (`npm`, `composer`, `pip`, Docker base images).
+- **Bun for JS/TS:** Full-stack JavaScript/TypeScript projects must use **Bun** as the runtime and package manager (`bun install`, `bun run`, `bunx`). Do not use npm, yarn, or pnpm unless explicitly requested.
+- **Stable-First Policy:** Always select stable, production-ready, LTS releases when adding dependencies across all ecosystems (`bun`, `composer`, `pip`, Docker base images).
 - **No Unstable Builds:** Pre-release packages (`alpha`, `beta`, `rc`, `canary`, `dev-main`) are strictly forbidden unless required by explicit user instruction.
-- **Lockfile Enforcement:** Always commit updated lockfiles (`package-lock.json`, `composer.lock`, etc.) after adding or updating dependencies to guarantee deterministic builds across environments.
+- **Lockfile Enforcement:** Always commit updated lockfiles (`bun.lock`, `composer.lock`, etc.) after adding or updating dependencies to guarantee deterministic builds across environments.
 
 ---
 
@@ -100,5 +101,5 @@ These principles are strictly enforced across **all languages and frameworks**:
 - **Functions & Components:** Keep functions under 50 lines and components/classes under 150 lines. Extract reusable hooks, sub-components, or helper functions into separate files when logic grows complex.
 - **Early Returns:** Prefer early returns to eliminate deeply nested `if/else` blocks.
 - **Defensive Defaults:** Use nullish coalescing (`??`) and optional chaining (`?.`) instead of logical OR (`||`) when evaluating potentially missing values.
-- **lint-staged + Husky (required for JS/TS):** Every JS/TS project must install `husky` and `lint-staged`, wire `.husky/pre-commit` to `npx lint-staged`, and ship `.lintstagedrc.json` (preferred over embedding config in `package.json`). Staged files are linted/formatted on commit—do not rely on manual `npm run lint` alone.
+- **lint-staged + Husky (required for JS/TS):** Every JS/TS project must install `husky` and `lint-staged`, wire `.husky/pre-commit` to `bunx lint-staged`, and ship `.lintstagedrc.json` (preferred over embedding config in `package.json`). Staged files are linted/formatted on commit—do not rely on manual `bun run lint` alone.
 - **Pre-Commit Rule:** Always run linting and code formatting tools via lint-staged on commit (`eslint`/`prettier` for JS/TS; `./vendor/bin/pint` for PHP when present).

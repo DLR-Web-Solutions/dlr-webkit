@@ -50,9 +50,10 @@ Refer to CLAUDE.md for core rules.
 
 ## Dependency & Package Management Directives
 
+- **Bun for JS/TS:** Full-stack JavaScript/TypeScript projects must use **Bun** as the runtime and package manager (`bun install`, `bun run`, `bunx`). Do not use npm, yarn, or pnpm unless the user explicitly requests otherwise. Commit `bun.lock` (not `package-lock.json` / `yarn.lock` / `pnpm-lock.yaml`).
 - **Stable Versions Only:** Always install and specify the latest **stable, LTS (Long Term Support)** versions of packages, libraries, and Docker base images.
 - **Strictly Avoid Unstable Releases:** Never install `alpha`, `beta`, `rc` (release candidate), `canary`, or nightly builds unless explicitly requested by the user.
-- **Explicit Version Pinning:** Ensure package manifest files (`package.json`, `composer.json`, `requirements.txt`, etc.) specify stable semantic version ranges and that lockfiles (`package-lock.json`, `composer.lock`) are updated and committed.
+- **Explicit Version Pinning:** Ensure package manifest files (`package.json`, `composer.json`, `requirements.txt`, etc.) specify stable semantic version ranges and that lockfiles (`bun.lock`, `composer.lock`) are updated and committed.
 
 # Claude Code Project Rules
 
