@@ -43,7 +43,9 @@ Refer to CLAUDE.md for core rules.
 
 ## File Structure & Error Handling Directives
 
+- **`src/` Root for App Code:** All application code lives under `src/`. Split deployable/runtime surfaces into sibling packages there—e.g. `src/client`, `src/server`, `src/another-server`—not as top-level `client/` / `server/` folders or scattered outside `src/`. Config, docs, scripts (`bin/`), and infrastructure stay at the repo root.
 - **High File Granularity:** Prefer multiple smaller, well-scoped files over one large file. Break down classes, components, helpers, and types into individual files to keep modules easily readable and navigable.
+- **Domain Nesting:** Keep small files, but when a folder fills with related peers (e.g. `repositories/`), nest them by domain—`repositories/billing/…`—so the tree stays scannable. Prefer many readable files in clear groups over a flat dump.
 - **Layered Backend:** Prefer `controllers/`, `services/`, and `repositories/` (or framework equivalents). Controllers are thin; services hold business logic; repositories handle data access.
 - **Granular UI:** Compose every screen from small, single-responsibility components—never monolithic page/view files.
 - **Centralized Error Handling:** Rely on dedicated server/app middleware (or global error boundaries) to handle exceptions centrally. Avoid writing repetitive inline error checks or `try/catch` blocks inside business/route functions unless local error recovery is strictly required.

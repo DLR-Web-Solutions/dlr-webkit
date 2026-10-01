@@ -8,7 +8,9 @@
 
 These principles are strictly enforced across **all languages and frameworks**:
 
+- **`src/` Root for App Code:** All application code lives under `src/`. Split deployable/runtime surfaces into sibling packages there—e.g. `src/client`, `src/server`, `src/another-server`—not as top-level `client/` / `server/` folders or scattered outside `src/`. Config, docs, scripts (`bin/`), and infrastructure stay at the repo root.
 - **File Granularity over Monoliths:** **Prefer multiple small, modular files** over large monolithic files. Break down classes, controllers, utilities, components, and schemas into dedicated, well-scoped files to maximize readability and maintainability.
+- **Domain Nesting:** Keep small files, but when a folder fills with related peers (e.g. `repositories/`), nest them by domain—`repositories/billing/…`—so the tree stays scannable. Prefer many readable files in clear groups over a flat dump.
 - **Controllers → Services → Repositories:** Prefer this folder/layer structure. Controllers stay thin; services own business logic; repositories own data access.
 - **Centralized Middleware & Error Handling:** Handle uncaught exceptions and unexpected failures using **centralized middleware or global error boundaries** (e.g., Laravel's exception handler in `bootstrap/app.php` or Express/Next.js middleware). Avoid writing repetitive inline error checks or manual `try/catch` wrapping inside individual functions unless local recovery or custom domain handling is strictly required.
 - **SOLID Design:**
