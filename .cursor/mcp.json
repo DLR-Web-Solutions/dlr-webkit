@@ -1,20 +1,16 @@
 {
     "mcpServers": {
         "playwright": {
-            "command": "npx",
-            "args": ["-y", "@playwright/mcp@latest"]
+            "command": "bunx",
+            "args": ["@playwright/mcp"]
         },
         "postgres": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@modelcontextprotocol/server-postgres",
-                "${DATABASE_URL}"
-            ]
+            "command": "bunx",
+            "args": ["@modelcontextprotocol/server-postgres", "${DATABASE_URL}"]
         },
         "github": {
-            "command": "npx",
-            "args": ["-y", "@modelcontextprotocol/server-github"],
+            "command": "bunx",
+            "args": ["@modelcontextprotocol/server-github"],
             "env": {
                 "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PAT}"
             }
@@ -37,13 +33,8 @@
             }
         },
         "figma": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@smithery/cli",
-                "run",
-                "@deepsuthar496/figma-mcp-server"
-            ],
+            "command": "bunx",
+            "args": ["@smithery/cli", "run", "@deepsuthar496/figma-mcp-server"],
             "env": {
                 "FIGMA_ACCESS_TOKEN": "${FIGMA_ACCESS_TOKEN}"
             }
