@@ -1,0 +1,15 @@
+---
+description: Commit and push with project git author email
+alwaysApply: true
+---
+
+# Git author
+
+For this repository, every commit must be authored as:
+
+`Joshua <dev.joshuadolor@gmail.com>`
+
+- Prefer repo-local `user.name` / `user.email` (already set on this machine).
+- If the environment may not use local git config, pass `--author="Joshua <dev.joshuadolor@gmail.com>"` on `git commit`.
+- Push does not rewrite author; fix authorship on commits before pushing.
+- Never modify global git config. Details: `docs/04-standards/git-conventions.md`.

@@ -61,14 +61,17 @@ prompts/             # /init, feature, bug-fix prompts
 bin/                 # install, init, doctor, verify
 .cursorrules         # Agent coding-rule SSOT
 CLAUDE.md            # Short agent entry → .cursorrules + context
+.cursor/skills/      # Cursor project skills (keep in sync with .claude/skills)
+.claude/skills/      # Claude Code project skills (e.g. /ui-kitchen-sink)
 ```
 
 ## Agent hierarchy
 
 1. `docs/00-context/project.md` — what this app is
-2. `.cursorrules` — how to work
+2. `.cursorrules` — how to work (CLAUDE.md points here for Claude Code)
 3. `docs/04-standards/` — detailed standards
 4. `prompts/` — task playbooks
+5. `.cursor/skills/` + `.claude/skills/` — tool-specific skills (same content; keep paired)
 
 Workflow: `UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW → DOCUMENT`
 

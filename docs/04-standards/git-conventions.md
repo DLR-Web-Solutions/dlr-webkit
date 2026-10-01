@@ -82,3 +82,15 @@ Agents scaffolding a new app must set this up; never skip hooks with `--no-verif
 
 - Before creating a new branch or executing `git checkout -b`, verify the branch name against these guidelines.
 - When generating commit messages or committing code autonomously, strictly use the Conventional Commits format above.
+- **Author (this project):** Commits must be authored as `Joshua <dev.joshuadolor@gmail.com>`. Repo-local `user.name` / `user.email` are set for that. If committing in an environment that ignores local git config, pass explicit author flags:
+
+```sh
+git commit --author="Joshua <dev.joshuadolor@gmail.com>" -m "$(cat <<'EOF'
+type(scope): summary
+
+EOF
+)"
+```
+
+- Push does not change authorship; ensure every commit on the branch already uses that author before `git push`.
+- Never change global git config. Never use `--no-verify` unless the user explicitly requests it.

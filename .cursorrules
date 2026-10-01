@@ -46,6 +46,7 @@ UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW →
 | Docker Compose + Dockerfile | **Conditional** | Use when DB/workers/container deploy help; never add Compose only to satisfy a rule. If compose **builds** an image, ship Dockerfile + HTTP `/health` probe (not `bun --version`) |
 | Husky + lint-staged | **Required** for JS/TS | `.husky/pre-commit` → `bunx lint-staged` |
 | Mobile-first granular UI + loading states | **Required** for UI work | a11y attributes on interactive UI |
+| UI kitchen sink before product UI | **Required** for UI work | Create/extend `/kitchen-sink`; visual SSOT — `.cursor/skills/…` / `.claude/skills/ui-kitchen-sink/SKILL.md` |
 
 ## Standing rules (short)
 
@@ -55,6 +56,8 @@ UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW →
 4. React forms: `noValidate` + react-hook-form + Zod (no native HTML constraint validation).
 5. Server-side authz always; never UI-only security.
 6. Prefer scripts in `docs/04-standards/automation.md` / `bin/` over ad-hoc command chains.
+7. UI: kitchen sink first (init or missing); reuse it for one look—Cursor: `.cursor/rules/ui-kitchen-sink.mdc`; Claude Code: `CLAUDE.md` + `.claude/skills/ui-kitchen-sink/SKILL.md`.
+8. Git author for this repo: `Joshua <dev.joshuadolor@gmail.com>` on every commit (see `docs/04-standards/git-conventions.md`).
 
 ## Versions & dependencies
 

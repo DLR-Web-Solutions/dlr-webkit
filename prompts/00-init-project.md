@@ -58,4 +58,13 @@ Update these files (do not invent parallel doc trees):
 5. `docs/02-architecture/tech-stack.md`
 6. `docs/05-database/schema.md` — high-level entities only if known
 
-Stop after writing. Summarize what was generated and remind the user to run `bun run doctor` after scaffolding code.
+### Step 7: UI Kitchen Sink (before product screens)
+
+When the stack includes a frontend, create the **kitchen sink** page before product UI. Follow `.cursor/skills/ui-kitchen-sink/SKILL.md` or `.claude/skills/ui-kitchen-sink/SKILL.md`, and `docs/04-standards/ui-accessibility.md`.
+
+- Route: `/kitchen-sink` or `/dev/kitchen-sink`
+- Catalog shared tokens + primitives (typography, buttons, forms, loading, feedback, navigation, overlays in scope)
+- Note path/route in `docs/00-context/project.md`
+- Do not auto-launch UI/UX designer agents—instructions only
+
+Stop after writing docs (and kitchen sink when scaffolding UI). Summarize what was generated and remind the user to run `bun run doctor` after scaffolding code.
