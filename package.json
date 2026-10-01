@@ -1,0 +1,31 @@
+{
+    "name": "dlr-webkit",
+    "version": "0.2.0",
+    "private": true,
+    "type": "module",
+    "description": "DLR WebKit — personal AI-native development kit for full-stack JS/TS (and Laravel) projects",
+    "engines": {
+        "bun": ">=1.1.0"
+    },
+    "packageManager": "bun@1.4.2",
+    "scripts": {
+        "lint": "eslint .",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "typecheck": "tsc --noEmit",
+        "test": "bun test",
+        "doctor": "bash bin/doctor.sh",
+        "verify": "bash bin/verify.sh",
+        "prepare": "husky"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.22.0",
+        "@types/bun": "^1.2.5",
+        "eslint": "^9.22.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^15.4.3",
+        "prettier": "^3.5.3",
+        "typescript": "^5.8.2",
+        "typescript-eslint": "^8.26.1"
+    }
+}
