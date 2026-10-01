@@ -20,6 +20,15 @@ bun run doctor
 bun run verify
 ```
 
+Non-interactive / safety env vars:
+
+| Variable                | Used by                 | Effect                                                |
+| :---------------------- | :---------------------- | :---------------------------------------------------- |
+| `DLR_APP_NAME`          | `init.sh`, `install.sh` | Project name without prompting                        |
+| `DLR_REMOVE_DEVKIT`     | `install.sh`            | `Y`/`N` whether to delete nested kit (default `N`)    |
+| `DLR_FORCE_OVERWRITE`   | `install.sh`            | `1` replaces existing target files (default preserve) |
+| `DLR_VERIFY_SKIP_TESTS` | `verify.sh`             | `1` skips test step (for nested verify-from-tests)    |
+
 ---
 
 ## Required Repo Tooling (JS/TS)
@@ -39,8 +48,9 @@ Install with: `bun add -d husky lint-staged` and `"prepare": "husky"` in `packag
 
 ## Script Creation Rules
 
-1. **Location:** All custom scripts must be stored in `bin/` or `scripts/`.
+1. **Location:** All custom scripts must be stored in `bin/`.
 2. **Shebang & Fail-Fast:** Always start with `#!/usr/bin/env bash` and `set -euo pipefail` so the script halts immediately on error.
 3. **Portability:** Ensure paths use relative resolution based on `SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"`.
 4. **Registry Update:** Every newly generated script MUST be added to the table above.
 5. **No duplicates:** Improve an existing script before adding a parallel one.
+6. **Safety:** Quote variables; never `rm -rf` without an explicit confirmed path; never print `.env` secrets; install preserves existing files unless `DLR_FORCE_OVERWRITE=1`.

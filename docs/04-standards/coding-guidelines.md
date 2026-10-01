@@ -11,7 +11,7 @@ These principles are strictly enforced across **all languages and frameworks**:
 - **`src/` Root for App Code:** All application code lives under `src/`. Split deployable/runtime surfaces into sibling packages there—e.g. `src/client`, `src/server`, `src/another-server`—not as top-level `client/` / `server/` folders or scattered outside `src/`. Config, docs, scripts (`bin/`), and infrastructure stay at the repo root.
 - **File Granularity over Monoliths:** **Prefer multiple small, modular files** over large monolithic files. Break down classes, controllers, utilities, components, and schemas into dedicated, well-scoped files to maximize readability and maintainability.
 - **Domain Nesting:** Keep small files, but when a folder fills with related peers (e.g. `repositories/`), nest them by domain—`repositories/billing/…`—so the tree stays scannable. Prefer many readable files in clear groups over a flat dump.
-- **Controllers → Services → Repositories:** Prefer this folder/layer structure. Controllers stay thin; services own business logic; repositories own data access.
+- **Controllers → Services → Repositories:** **Default** backend layering. Controllers stay thin; services own business logic; repositories own data access. Adapt folder names to the framework when required.
 - **Centralized Middleware & Error Handling:** Handle uncaught exceptions and unexpected failures using **centralized middleware or global error boundaries** (e.g., Laravel's exception handler in `bootstrap/app.php` or Express/Next.js middleware). Avoid writing repetitive inline error checks or manual `try/catch` wrapping inside individual functions unless local recovery or custom domain handling is strictly required.
 - **SOLID Design:**
     - **Single Responsibility (SRP):** Keep files, classes, and functions focused on a single responsibility.
@@ -27,9 +27,9 @@ These principles are strictly enforced across **all languages and frameworks**:
 ## 2. Dependency & Package Management
 
 - **Bun for JS/TS:** Full-stack JavaScript/TypeScript projects must use **Bun** as the runtime and package manager (`bun install`, `bun run`, `bunx`). Do not use npm, yarn, or pnpm unless explicitly requested.
-- **Stable-First Policy:** Always select stable, production-ready, LTS releases when adding dependencies across all ecosystems (`bun`, `composer`, `pip`, Docker base images).
-- **No Unstable Builds:** Pre-release packages (`alpha`, `beta`, `rc`, `canary`, `dev-main`) are strictly forbidden unless required by explicit user instruction.
-- **Lockfile Enforcement:** Always commit updated lockfiles (`bun.lock`, `composer.lock`, etc.) after adding or updating dependencies to guarantee deterministic builds across environments.
+- **Lockfile is truth:** Prefer versions already declared in `package.json` / `bun.lock` (or `composer.lock`). Upgrade deliberately and run `bun run verify`.
+- **Stable when adding:** New dependencies must be current **stable** releases (no alpha/beta/rc/canary unless the user asks). Do not use `@latest`.
+- **Lockfile Enforcement:** Always commit updated lockfiles after adding or updating dependencies.
 
 ---
 
@@ -85,12 +85,12 @@ These principles are strictly enforced across **all languages and frameworks**:
 
 ## 6. Data Access (ORM)
 
-- **JS/TS projects:** Use **Prisma** as the ORM. No ad-hoc SQL string building; use the Prisma Client.
+- **JS/TS projects (default):** Use **Prisma**. No ad-hoc SQL string building; use the Prisma Client. Document any alternate ORM choice in `docs/00-context/project.md`.
 - **Laravel/PHP projects:** Use **Eloquent** (and Query Builder where appropriate). Prefer Eloquent models and relationships over raw queries.
 
 ## 7. Frontend HTTP Client
 
-- **Axios Only:** All browser/frontend API calls must go through **Axios** (typically a shared configured instance, e.g. `api`). Do not use `fetch` for application API traffic unless Axios is unavailable for a platform-specific constraint explicitly approved by the user.
+- **Default:** Browser/frontend API calls go through **Axios** (shared configured instance). Do not use raw `fetch` for application API traffic unless a platform constraint requires it—and document that exception.
 
 ## 8. UI Layout
 

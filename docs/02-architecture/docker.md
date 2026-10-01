@@ -1,8 +1,12 @@
 # Docker & Environment Port Guidelines
 
+## When to use
+
+Docker Compose is **recommended** for deployable apps and local parity—not mandatory for every experiment. If you add `docker-compose.yml` that **builds** an app image, ship a matching `Dockerfile`.
+
 ## Core Rule
 
-All Docker container host bindings MUST be driven dynamically by `.env` variables. Hardcoding host ports in `docker-compose.yml` or `Dockerfile` is strictly prohibited.
+All Docker container **host** bindings MUST be driven dynamically by `.env` variables. Hardcoding host ports in `docker-compose.yml` or `Dockerfile` is strictly prohibited.
 
 ## Objectives
 

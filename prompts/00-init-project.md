@@ -25,17 +25,19 @@ Propose a minimal role set (e.g. Admin, User, Guest) and confirm.
 Recommend or confirm stack. **Kit defaults** unless overridden:
 
 - **Surfaces:** Code under `src/client`, `src/server` (add more servers only if needed)
-- **Runtime (JS/TS):** Bun
+- **Runtime (JS/TS):** Bun (**required**)
 - **Backend:** Prefer a single cohesive server (Hono/Express/Next handlers/Laravel)—no microservices by default
 - **Frontend:** React + Vite or framework already chosen; mobile-first Tailwind + Shadcn/Radix
-- **Database:** PostgreSQL
-- **ORM:** Prisma (JS/TS) / Eloquent (Laravel)
-- **Validation:** Zod; React forms → react-hook-form + Zod; `noValidate`
-- **Frontend HTTP:** Axios
-- **Architecture:** Controllers → Services → Repositories; domain-nest folders when crowded
-- **Tooling:** Husky + lint-staged; `bin/doctor` + `bin/verify`
+- **Database:** PostgreSQL (recommended)
+- **ORM:** Prisma (JS/TS) / Eloquent (Laravel) — **defaults**
+- **Validation:** Zod (**required** for JS/TS); React forms → react-hook-form + Zod; `noValidate`
+- **Frontend HTTP:** Axios (**default**)
+- **Architecture:** Controllers → Services → Repositories (**default**); domain-nest folders when crowded
+- **Tooling:** Husky + lint-staged; `bun run doctor` + `bun run verify`
+- **Containers:** Docker Compose **recommended** when deploying/containerizing
 - **AI apps (only if needed):** Provider abstraction + structured output + Zod (see `docs/02-architecture/ai-providers.md`)
 - **SaaS:** Design for users/roles now; multi-tenant only if the user requires it—do not force tenancy
+- **Versions:** Prefer lockfile versions; never instruct `@latest`
 
 ### Step 4: Auth, Data & Constraints
 

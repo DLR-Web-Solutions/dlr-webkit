@@ -20,13 +20,14 @@
 
 ## Shortcuts
 
-- `/init` or “initialize project” → follow `prompts/00-init-project.md`
+- `/init` or “initialize project” → `prompts/00-init-project.md` (discovery + docs)
+- `bash bin/init.sh "Name"` → placeholder rename only
 - New feature → `prompts/01-new-feature.md`
 - Bug fix → `prompts/02-bug-fix.md`
 
 ## Diagnostics
 
 ```bash
-bun run doctor
-bun run verify
+bun run doctor   # bash bin/doctor.sh
+bun run verify   # bash bin/verify.sh
 ```

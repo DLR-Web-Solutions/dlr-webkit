@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Diagnose common environment and kit problems for dlr-webkit projects.
+# Never prints secret values from .env.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -24,23 +25,16 @@ echo "Runtime"
 if command -v bun >/dev/null 2>&1; then
   ok "bun $(bun --version)"
 else
-  bad "bun not found (required for JS/TS projects)"
-fi
-
-if command -v docker >/dev/null 2>&1; then
-  ok "docker available"
-  if docker info >/dev/null 2>&1; then
-    ok "docker daemon reachable"
+  if [ -f package.json ]; then
+    bad "bun not found (required when package.json is present)"
   else
-    warn "docker installed but daemon not reachable"
+    warn "bun not found"
   fi
-else
-  warn "docker not found (needed for compose-based workflows)"
 fi
 
 echo ""
 echo "Kit / project files"
-for f in .cursorrules CLAUDE.md package.json docker-compose.yml Dockerfile .env.example docs/00-context/project.md; do
+for f in .cursorrules CLAUDE.md docs/00-context/project.md .env.example; do
   if [ -e "$f" ]; then
     ok "$f present"
   else
@@ -53,6 +47,35 @@ if [ -d src ]; then
 else
   bad "src/ directory missing"
 fi
+
+if [ -f package.json ] || [ -f composer.json ]; then
+  manifests=""
+  [ -f package.json ] && manifests="package.json"
+  if [ -f composer.json ]; then
+    if [ -n "$manifests" ]; then
+      manifests="$manifests, composer.json"
+    else
+      manifests="composer.json"
+    fi
+  fi
+  ok "package manifest present ($manifests)"
+else
+  warn "no package.json or composer.json yet (expected after scaffolding)"
+fi
+
+echo ""
+echo "bin scripts"
+for s in doctor.sh verify.sh init.sh install.sh; do
+  if [ -f "bin/$s" ]; then
+    if [ -x "bin/$s" ]; then
+      ok "bin/$s executable"
+    else
+      warn "bin/$s exists but is not executable"
+    fi
+  else
+    bad "missing bin/$s"
+  fi
+done
 
 echo ""
 echo "Dependencies"
@@ -72,7 +95,7 @@ fi
 echo ""
 echo "Environment"
 if [ -f .env ]; then
-  ok ".env present"
+  ok ".env present (values not printed)"
   if [ -f .env.example ]; then
     missing=0
     while IFS= read -r line || [ -n "$line" ]; do
@@ -80,9 +103,12 @@ if [ -f .env ]; then
         ''|\#*) continue ;;
       esac
       key="${line%%=*}"
-      key="$(echo "$key" | tr -d '[:space:]')"
+      key="${key%"${key##*[![:space:]]}"}"
+      key="${key#"${key%%[![:space:]]*}"}"
       [ -z "$key" ] && continue
-      if ! grep -q "^${key}=" .env 2>/dev/null; then
+      # Skip commented-style optional keys that were left as comments only
+      if ! grep -qE "^${key}=" .env 2>/dev/null; then
+        # Keys present only as comments in .env.example are optional — already skipped via \#*
         warn ".env missing key from .env.example: $key"
         missing=1
       fi
@@ -91,46 +117,55 @@ if [ -f .env ]; then
       ok ".env covers keys declared in .env.example"
     fi
   fi
+
+  echo ""
+  echo "Database (config only — connectivity not probed)"
+  if grep -qE '^DATABASE_URL=.+' .env 2>/dev/null; then
+    ok "DATABASE_URL is set"
+  elif grep -qE '^DB_DATABASE=.+' .env 2>/dev/null; then
+    ok "DB_* variables present (compose-style)"
+  else
+    warn "no DATABASE_URL or DB_DATABASE set in .env"
+  fi
 else
-  warn ".env missing — copy .env.example to .env and fill secrets"
+  warn ".env missing — copy .env.example to .env and fill secrets (do not commit .env)"
 fi
 
 echo ""
-echo "Docker Compose"
+echo "Docker"
 if [ -f docker-compose.yml ]; then
-  if [ -f Dockerfile ]; then
-    ok "Dockerfile referenced by compose exists"
-  else
-    bad "docker-compose expects Dockerfile but it is missing"
-  fi
-  if grep -qE "ports:|[[:space:]]- ['\"]?[0-9]+:[0-9]+" docker-compose.yml 2>/dev/null; then
-    if grep -qE '\$\{APP_PORT|\$\{DB_PORT' docker-compose.yml; then
-      ok "compose uses dynamic APP_PORT/DB_PORT substitutions"
+  ok "docker-compose.yml present"
+  if grep -qE 'dockerfile:\s*Dockerfile|build:' docker-compose.yml; then
+    if [ -f Dockerfile ]; then
+      ok "Dockerfile present (referenced by compose)"
     else
-      # soft check: hardcoded ports are discouraged
-      warn "review compose ports — prefer \${APP_PORT}/\${DB_PORT} substitutions"
+      bad "compose references a build/Dockerfile but Dockerfile is missing"
     fi
   fi
-fi
-
-echo ""
-echo "Database (optional)"
-if [ -f .env ] && grep -q '^DATABASE_URL=' .env 2>/dev/null; then
-  if command -v bun >/dev/null 2>&1; then
-    # Best-effort TCP check is intentionally light; full connectivity is app-specific.
-    ok "DATABASE_URL is set (connectivity not probed)"
+  if grep -qE '\$\{APP_PORT|\$\{DB_PORT' docker-compose.yml; then
+    ok "compose uses dynamic APP_PORT/DB_PORT substitutions"
+  else
+    warn "prefer \${APP_PORT}/\${DB_PORT} for host port mappings"
   fi
-elif [ -f .env ] && grep -q '^DB_DATABASE=' .env 2>/dev/null; then
-  ok "DB_* variables present (compose-style)"
+  if command -v docker >/dev/null 2>&1; then
+    ok "docker CLI available"
+    if docker info >/dev/null 2>&1; then
+      ok "docker daemon reachable"
+    else
+      warn "docker installed but daemon not reachable"
+    fi
+  else
+    warn "docker CLI not found (needed to run compose)"
+  fi
 else
-  warn "no DATABASE_URL or DB_* vars detected"
+  warn "no docker-compose.yml (optional until you containerize)"
 fi
 
 echo ""
 echo "Quality hooks"
 if [ -f .husky/pre-commit ]; then
   ok "husky pre-commit present"
-  if grep -q 'bunx lint-staged\|lint-staged' .husky/pre-commit; then
+  if grep -q 'lint-staged' .husky/pre-commit; then
     ok "pre-commit invokes lint-staged"
   else
     warn "pre-commit does not appear to run lint-staged"

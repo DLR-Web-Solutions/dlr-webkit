@@ -1,58 +1,77 @@
 # DLR WebKit
 
-Personal **AI-native development kit** for solo senior development. Overlay docs, AI instructions, quality tooling, and conventions onto a new or existing project—then let coding agents work inside a known framework.
+**AI-native development overlay** for solo senior developers. It layers documentation, agent instructions, quality tooling, and conventions onto a new or existing project so humans and coding agents share one playbook.
 
-This repository is a **kit**, not a finished product app. Application code belongs under `src/<surface>/` after you scaffold or overlay.
+## What it is
 
-## What you get
+- A reusable **kit** (rules, docs, prompts, scripts, CI defaults)
+- Optimized for **Bun**-based JS/TS apps (Laravel/PHP patterns documented where relevant)
+- An agent operating system: inspect → implement → test → `verify`
 
-- AI agent rules (`.cursorrules`, `CLAUDE.md`) and task prompts (`prompts/`)
-- Product / architecture / standards docs (`docs/`)
-- Bun-first JS/TS tooling (ESLint, Prettier, Husky, lint-staged)
-- Docker Compose with dynamic host ports
-- `bin/doctor` and `bin/verify` for diagnostics and quality gates
-- MCP server configs for Cursor / Claude Code
+## What it is not
+
+- Not a finished product application
+- Not a microservice / K8s / “enterprise platform” scaffold
+- Not a substitute for filling `docs/00-context/project.md` for your app
+
+Application code belongs under `src/<surface>/` (e.g. `src/client`, `src/server`) after you scaffold or overlay.
 
 ## Quick start
 
 ### Overlay into a parent project
 
+Nest this kit inside a project folder, then:
+
 ```bash
-# From inside a nested clone of this kit:
 bash bin/install.sh
+# Non-interactive:
+# DLR_APP_NAME=MyApp DLR_REMOVE_DEVKIT=0 bash bin/install.sh
 ```
 
-### Initialize docs for a named app
+Existing target files are **preserved** by default (`DLR_FORCE_OVERWRITE=1` to replace).
+
+### Name placeholders
 
 ```bash
-bash bin/init.sh
-# or ask an agent: /init
+bash bin/init.sh "My App"
+# or: DLR_APP_NAME="My App" bash bin/init.sh
 ```
 
-### Day-to-day (in a JS/TS project using this kit)
+### AI discovery (`/init`)
+
+Ask an agent to run `/init` — it follows `prompts/00-init-project.md` and fills product/architecture context (including `docs/00-context/project.md`).
+
+### Day-to-day
 
 ```bash
 bun install
-bun run doctor    # environment / tooling health
-bun run verify    # format, lint, typecheck, tests, audit
+bun run doctor   # → bash bin/doctor.sh
+bun run verify   # → bash bin/verify.sh (format, lint, typecheck, tests, audit)
 ```
+
+A change is not done until `bun run verify` passes.
 
 ## Layout
 
 ```
-src/                 # Application surfaces (client, server, …)
-docs/                # Product, architecture, standards (AI context)
-prompts/             # Reusable agent task prompts
-bin/                 # Install, init, doctor, verify
-.cursorrules         # Agent SSOT for coding rules
+src/                 # App surfaces (client, server, …)
+docs/                # Product, architecture, standards (agent context)
+docs/00-context/     # Canonical project facts for agents
+prompts/             # /init, feature, bug-fix prompts
+bin/                 # install, init, doctor, verify
+.cursorrules         # Agent coding-rule SSOT
+CLAUDE.md            # Short agent entry → .cursorrules + context
 ```
 
-Read `docs/00-context/project.md` first when working on a consumer project.
+## Agent hierarchy
 
-## Principles
+1. `docs/00-context/project.md` — what this app is
+2. `.cursorrules` — how to work
+3. `docs/04-standards/` — detailed standards
+4. `prompts/` — task playbooks
 
-1. Security before speed
-2. Small files, domain-nested folders, code under `src/`
-3. Controllers → Services → Repositories
-4. Zod validation; Bun for JS/TS; no invented APIs or schemas
-5. A change is not done until `bin/verify` passes
+Workflow: `UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW → DOCUMENT`
+
+## Versions
+
+Prefer lockfile / declared versions. Upgrade deliberately; never instruct `@latest`.
