@@ -1,18 +1,64 @@
 # AI Coding Agent Rules (Cursor / Copilot)
 
-Refer to CLAUDE.md for core rules.
+> **Single Source of Truth** for coding rules. Project facts live in `docs/00-context/project.md`. Detail lives in `docs/04-standards/`. Do not duplicate long standards here—point and enforce.
 
-1. Always verify existing types in src/ before creating new ones.
+## Agent Workflow (mandatory)
+
+```
+UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW → DOCUMENT
+```
+
+1. **UNDERSTAND** — Read `docs/00-context/project.md` and the relevant feature/product docs.
+2. **INSPECT** — Search `src/` and existing patterns; reuse before inventing.
+3. **PLAN** — Brief plan for non-trivial work (what files, what tests). No speculative architecture.
+4. **IMPLEMENT** — Small, focused diffs. Match existing style and layering.
+5. **TEST** — Add/update tests for meaningful behavior changes.
+6. **VERIFY** — Run `bin/verify` (or `bun run verify`). A change is incomplete until it passes.
+7. **REVIEW** — Inspect the diff for unrelated edits, secrets, weakened security, invented APIs/schemas.
+8. **DOCUMENT** — Update `docs/00-context/project.md` / feature docs only when behavior or architecture changed.
+
+### Hard prohibitions
+
+- Do not modify unrelated code.
+- Do not introduce unnecessary dependencies.
+- Do not rewrite working systems without a concrete reason.
+- Do not invent APIs, routes, or database structures that contradict docs/schema.
+- Do not skip tests for meaningful changes.
+- Do not claim success without verification.
+- Do not weaken security to make a test pass.
+- Do not use npm/yarn/pnpm in JS/TS projects (use **Bun**).
+- Do not tell anyone to use “latest” floating versions—use project lockfiles and pinned stables.
+
+### Before coding
+
+Inspect existing implementation and reuse it. Prefer extending a repository/service over adding a parallel path.
+
+### During coding
+
+Follow `src/<surface>/` layout, controllers → services → repositories, Zod validation, and accessibility rules.
+
+### After coding
+
+Run the narrowest useful tests, then `bin/verify`.
+
+### Before completion
+
+Review the git diff. Remove drive-by changes. Confirm `.env` secrets were not committed.
+
+## Standing rules
+
+1. Always verify existing types in `src/` before creating new ones.
 2. Read `@docs/04-standards/coding-guidelines.md` for formatting and strict TypeScript rules.
 3. Every UI component must be accessible with proper aria-attributes.
 
 - **Module Syntax:** Strictly use ES Module `import`/`export` syntax. CommonJS `require()` is prohibited.
-- **Validation:** Prefer **Zod** for all JS/TS validation (forms, APIs, env). Derive types with `z.infer`. Never use native HTML/browser constraint validation—forms must use `noValidate` and custom Zod error UI. React frontends must use **react-hook-form** (with Zod resolvers).
+- **Validation:** Prefer **Zod** for all JS/TS validation (forms, APIs, env). Derive types with `z.infer`. Never use native HTML/browser constraint validation—forms must use `noValidate` and custom Zod error UI. React frontends must use **react-hook-form** (with Zod resolvers). Treat LLM output as untrusted input: structured output → Zod → application logic.
 - **ORM:** Use **Prisma** for JS/TS projects; use **Eloquent** for Laravel/PHP projects.
 - **Architecture:** Prefer **controllers / services / repositories** folder structure (thin controllers → services → repositories).
 - **Frontend HTTP:** Use **Axios** (shared instance) for frontend API calls—not raw `fetch`.
 - **UI:** Always implement **mobile-first** layouts. All UIs must be **granular**—small, single-purpose components; no monolithic pages/views. Always provide a **loading component/state** whenever async work can leave the user waiting.
 - **Pre-commit:** JS/TS projects must use **Husky** + **lint-staged** (see `.lintstagedrc.json` and `.husky/pre-commit`). Never skip with `--no-verify` unless the user asks.
+- **Verification:** Prefer `bin/verify` / `bun run verify` before declaring work complete. Prefer `bin/doctor` when environment issues are suspected.
 
 ## Docker & Containerization Rules
 
@@ -23,6 +69,7 @@ Refer to CLAUDE.md for core rules.
 ## Special Commands
 
 - When the user types `/init` or "initialize project", read `@prompts/00-init-project.md` and start the interactive discovery interview immediately.
+- Prefer scripts registered in `docs/04-standards/automation.md` over ad-hoc command chains.
 
 ## Automatic Workflow Codification
 
@@ -40,6 +87,7 @@ Refer to CLAUDE.md for core rules.
 - **Input Validation & Sanitization:** Validate and sanitize all external inputs with **Zod** (JS/TS) or Form Requests (Laravel); never trust client-side checks alone. Prevent SQL injection, XSS, and command injection.
 - **Strict Authorization:** Always enforce server-side authentication and role-based access checks on every protected endpoint and server action—never rely on client-side routing guards alone.
 - **Safe Defaults:** Enforce HTTPS, safe CORS policies, secure HTTP-only cookies, and proper content security policy (CSP) headers out of the box.
+- **Logging:** Never log secrets, session tokens, passwords, or full payment payloads.
 
 ## File Structure & Error Handling Directives
 
@@ -53,15 +101,11 @@ Refer to CLAUDE.md for core rules.
 ## Dependency & Package Management Directives
 
 - **Bun for JS/TS:** Full-stack JavaScript/TypeScript projects must use **Bun** as the runtime and package manager (`bun install`, `bun run`, `bunx`). Do not use npm, yarn, or pnpm unless the user explicitly requests otherwise. Commit `bun.lock` (not `package-lock.json` / `yarn.lock` / `pnpm-lock.yaml`).
-- **Stable Versions Only:** Always install and specify the latest **stable, LTS (Long Term Support)** versions of packages, libraries, and Docker base images.
+- **Stable Versions Only:** Always install and specify the latest **stable, LTS (Long Term Support)** versions of packages, libraries, and Docker base images. Prefer versions already pinned in the project lockfile over “install latest”.
 - **Strictly Avoid Unstable Releases:** Never install `alpha`, `beta`, `rc` (release candidate), `canary`, or nightly builds unless explicitly requested by the user.
 - **Explicit Version Pinning:** Ensure package manifest files (`package.json`, `composer.json`, `requirements.txt`, etc.) specify stable semantic version ranges and that lockfiles (`bun.lock`, `composer.lock`) are updated and committed.
+- **Fewer Dependencies:** Do not add a package if the runtime, stdlib, or an existing dependency already solves the problem cleanly.
 
-# Claude Code Project Rules
+## Init Shortcut
 
-> **Single Source of Truth:** All system rules, coding standards, security directives, git conventions, and automation guidelines are defined in `@.cursorrules`.
-
-## Execution Directives
-
-1. **Load Rules:** Always read and strictly enforce all guidelines, formatting rules, and guardrails located in `.cursorrules`.
-2. **Init Shortcut:** When the user types `/init` or "initialize project", read `@prompts/00-init-project.md` and start the interactive discovery interview immediately.
+When the user types `/init` or "initialize project", read `@prompts/00-init-project.md` and start the interactive discovery interview immediately.

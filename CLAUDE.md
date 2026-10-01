@@ -1,8 +1,32 @@
-# Claude Code Project Rules
+# Claude Code / Agent Entry
 
-> **Single Source of Truth:** All system rules, coding standards, security directives, git conventions, and automation guidelines are defined in `@.cursorrules`.
+> **SSOT for coding rules:** `.cursorrules`  
+> **SSOT for project facts:** `docs/00-context/project.md`  
+> **Standards detail:** `docs/04-standards/`
 
-## Execution Directives
+## Before any work
 
-1. **Load Rules:** Always read and strictly enforce all guidelines, formatting rules, and guardrails located in `.cursorrules`.
-2. **Init Shortcut:** When the user types `/init` or "initialize project", read `@prompts/00-init-project.md` and start the interactive discovery interview immediately.
+1. Read `docs/00-context/project.md`.
+2. Read `.cursorrules`.
+3. Inspect existing code under `src/`—reuse before inventing.
+
+## Workflow
+
+`UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW → DOCUMENT`
+
+- Meaningful changes need tests.
+- Completion requires `bin/verify` (or `bun run verify`) passing.
+- Do not claim success without verification.
+
+## Shortcuts
+
+- `/init` or “initialize project” → follow `prompts/00-init-project.md`
+- New feature → `prompts/01-new-feature.md`
+- Bug fix → `prompts/02-bug-fix.md`
+
+## Diagnostics
+
+```bash
+bun run doctor
+bun run verify
+```
