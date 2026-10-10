@@ -105,7 +105,10 @@ fi
 FAILED_STEP="bun audit"
 echo ""
 echo "→ bun audit"
-bun audit
+# Accepted advisories (dev-only, no published fix). Re-check with `bun audit` and remove when fixed.
+# GHSA-vfj7-8cjw-p6xm — braces@3.0.3 (lint-staged > micromatch > braces): stack exhaustion on
+#   deeply nested glob patterns; only our own .lintstagedrc patterns reach it. Added 2026-10-10.
+bun audit --ignore GHSA-vfj7-8cjw-p6xm
 echo "  ✔ bun audit"
 FAILED_STEP=""
 
