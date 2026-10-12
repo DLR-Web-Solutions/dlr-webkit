@@ -39,13 +39,13 @@ The local `.env` file is ignored by Git. Do not put API keys in it; this first m
 
 ## Development and tests
 
-Use Python 3.12+ and install the pinned dependencies:
+Use Python 3.12+:
 
 ```bash
 python -m venv .venv
 . .venv/bin/activate
 pip install -r services/jev-futures-scalper/requirements.txt
-pytest -q services/jev-futures-scalper/tests
+PYTHONPATH=services/jev-futures-scalper pytest -q services/jev-futures-scalper/tests
 ```
 
 ## Architecture boundary
