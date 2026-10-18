@@ -11,7 +11,7 @@ All branch names must be lowercase, kebab-case, and prefixed with an explicit ca
 | **Hotfix**        | `hotfix/`             | `hotfix/login-session-crash`   | Urgent production fix                        |
 | **Refactor**      | `refactor/`           | `refactor/user-service-logic`  | Code restucturing without behavior change    |
 | **Documentation** | `docs/`               | `docs/update-architecture-map` | Documentation or guide updates               |
-| **Maintenance**   | `chore/`              | `chore/update-eslint-config`   | Build tools, dependencies, or config changes |
+| **Maintenance**   | `chore/`              | `chore/update-ruff-config`   | Build tools, dependencies, or config changes |
 
 ---
 
@@ -54,25 +54,22 @@ refactor(users): extract full name formatting into User entity getter
 
 ---
 
-## 3. Pre-Commit Hooks (Husky + lint-staged)
+## 3. Pre-Commit Hooks (pre-commit)
 
-JS/TS projects **must** use **Husky** + **lint-staged** so only staged files are checked/fixed before each commit.
+Python projects **must** use **pre-commit** so only staged files are checked/fixed before each commit.
 
-1. Install as devDependencies: `husky`, `lint-staged`, plus `eslint` / `prettier` (and `typescript-eslint` as needed).
-2. Enable Husky (`bunx husky init` or `prepare` script: `"prepare": "husky"`).
-3. `.husky/pre-commit` must run:
+1. Install as devDependencies: `pre-commit`.
+2. Enable pre-commit (`uv add --dev pre-commit && uv run pre-commit install`).
+3. `.pre-commit-config.yaml` must include ruff hooks:
 
-```sh
-bunx lint-staged
+```yaml
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
+    hooks:
+      - id: ruff-format
+      - id: ruff
 ```
-
-4. Provide `.lintstagedrc.json` (kit default—preferred over a `package.json` key). Typical rules:
-
-| Glob                                 | Commands                           |
-| :----------------------------------- | :--------------------------------- |
-| `*.{js,jsx,ts,tsx,mjs,cjs}`          | `eslint --fix`, `prettier --write` |
-| `*.{json,md,yml,yaml,css,scss,html}` | `prettier --write`                 |
-| `*.php` (Laravel)                    | `./vendor/bin/pint`                |
 
 Agents scaffolding a new app must set this up; never skip hooks with `--no-verify` unless the user explicitly requests it.
 

@@ -13,7 +13,7 @@ UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW →
 3. **PLAN** — Brief plan for non-trivial work (files + tests). No speculative architecture.
 4. **IMPLEMENT** — Small, focused diffs. Match existing style and layering.
 5. **TEST** — Add/update tests for meaningful behavior changes.
-6. **VERIFY** — Run `bun run verify` (or `bash bin/verify.sh`). Incomplete until it passes.
+6. **VERIFY** — Run `bash bin/verify.sh`. Incomplete until it passes.
 7. **REVIEW** — Diff for unrelated edits, secrets, weakened security, invented APIs/schemas.
 8. **DOCUMENT** — Update project context / feature docs only when contracts or architecture change.
 
@@ -24,36 +24,37 @@ UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW →
 - Do not invent APIs, routes, or DB structures that contradict docs/schema.
 - Do not skip tests for meaningful changes or claim success without verification.
 - Do not weaken security to make a test pass.
-- JS/TS: use **Bun** (`bun` / `bunx`), not npm/yarn/pnpm, unless the user asks otherwise.
+- Python: use **uv** (`uv add`, `uv run`, `uvx`), not pip/poetry/pipenv, unless the user asks otherwise.
 - Do not instruct anyone to install `@latest` / floating “latest” versions.
 
 ### Completion checklist
 
 - Inspect before coding; reuse existing modules.
-- Run narrow tests, then `bun run verify`.
+- Run narrow tests (`uv run pytest -q path`), then `bash bin/verify.sh`.
 - Review `git diff`; never commit `.env` secrets.
 
 ## Defaults vs requirements
 
 | Topic | Strength | Guidance |
 | :---- | :------- | :------- |
-| Bun (JS/TS) | **Required** for JS/TS apps from this kit | Lockfile = source of truth |
-| Zod validation (JS/TS) | **Required** | Env, forms, APIs; LLM output → Zod |
+| uv (Python) | **Required** for Python apps from this kit | Lockfile = source of truth |
+| Pydantic v2 models (Python) | **Required** | Env, forms, APIs; LLM output → Pydantic validate |
 | `src/<surface>/` layout | **Required** | e.g. `src/client`, `src/server` |
 | Controllers → services → repositories | **Default** for backends | Adapt names to the framework; keep the separation |
-| Prisma (JS/TS) / Eloquent (Laravel) | **Default** ORM | Override only with a documented reason |
-| Axios (browser API client) | **Default** | Shared instance; avoid raw `fetch` for app APIs unless constrained |
-| Docker Compose + Dockerfile | **Conditional** | Use when DB/workers/container deploy help; never add Compose only to satisfy a rule. If compose **builds** an image, ship Dockerfile + HTTP `/health` probe (not `bun --version`) |
-| Husky + lint-staged | **Required** for JS/TS | `.husky/pre-commit` → `bunx lint-staged` |
+| SQLAlchemy 2.x (+ Alembic) (Python) / Eloquent (Laravel) | **Default** ORM | Override only with a documented reason |
+| httpx (Python HTTP client) | **Default** | Shared instance; avoid raw `requests` for app APIs unless constrained |
+| Docker Compose + Dockerfile | **Conditional** | Use when DB/workers/container deploy help; never add Compose only to satisfy a rule. If compose **builds** an image, ship Dockerfile + HTTP `/health` probe (not a runtime `--version` flag) |
+| pre-commit | **Required** for Python | `.pre-commit-config.yaml` → `uv run pre-commit install` |
+| Ruff + pytest (+ mypy) | **Required** | `bin/verify.sh` runs format check, lint, mypy (if configured), pytest, pip-audit |
 | Mobile-first granular UI + loading states | **Required** for UI work | a11y attributes on interactive UI |
 | UI kitchen sink before product UI | **Required** for UI work | Create/extend `/kitchen-sink`; visual SSOT — `.cursor/skills/…` / `.claude/skills/ui-kitchen-sink/SKILL.md` |
 
 ## Standing rules (short)
 
 1. Verify existing types in `src/` before creating new ones.
-2. Read `docs/04-standards/coding-guidelines.md` for TypeScript/format detail.
-3. ES modules only (no CommonJS `require`).
-4. React forms: `noValidate` + react-hook-form + Zod (no native HTML constraint validation).
+2. Read `docs/04-standards/coding-guidelines.md` for Python/type detail.
+3. Absolute imports from the package under src/ (src layout); no wildcard imports.
+4. When a JS frontend exists: React forms use `noValidate` + react-hook-form + Zod; the Python backend still validates with Pydantic.
 5. Server-side authz always; never UI-only security.
 6. Prefer scripts in `docs/04-standards/automation.md` / `bin/` over ad-hoc command chains.
 7. UI: kitchen sink first (init or missing); reuse it for one look—Cursor: `.cursor/rules/ui-kitchen-sink.mdc`; Claude Code: `CLAUDE.md` + `.claude/skills/ui-kitchen-sink/SKILL.md`.
@@ -61,7 +62,7 @@ UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW →
 
 ## Versions & dependencies
 
-> Prefer versions already declared by the project and lockfile. Upgrade deliberately, check compatibility, and verify with `bun run verify`.
+> Prefer versions already declared by the project and lockfile. Upgrade deliberately, check compatibility, and verify with `bash bin/verify.sh`.
 
 - When **adding** a dependency: choose an explicit **stable** release (no alpha/beta/rc/canary/`@latest` unless the user asks), pin a sensible range, update the lockfile.
 - When **changing** an existing dependency: bump intentionally, check compatibility, run verify.
@@ -71,7 +72,7 @@ UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW →
 ## Security (priority #1)
 
 - No hardcoded secrets; `.env` only; never log tokens/passwords/card data.
-- Validate/sanitize all external input (Zod / Form Requests).
+- Validate/sanitize all external input (Pydantic / Form Requests).
 - Safe cookies (HttpOnly, Secure in prod, SameSite), HTTPS, tight CORS/CSP when serving browsers.
 
 ## Structure

@@ -13,12 +13,12 @@
 
 | Layer                     | Choice                                                   |
 | :------------------------ | :------------------------------------------------------- |
-| Runtime / package manager | Bun (JS/TS) or PHP/Composer (Laravel)                    |
-| Backend                   | [e.g. Hono / Express / Next.js route handlers / Laravel] |
+| Runtime / package manager | Python 3.12 + uv                                         |
+| Backend                   | [e.g. FastAPI / Flask / Django]                          |
 | Frontend                  | [e.g. React + Vite / Next.js / Inertia + Vue]            |
 | Database                  | [PostgreSQL recommended]                                 |
-| ORM                       | Prisma (JS/TS) / Eloquent (Laravel)                      |
-| Validation                | Zod (JS/TS) / Form Requests (Laravel)                    |
+| ORM                       | SQLAlchemy + Alembic                                     |
+| Validation                | Pydantic (Python) / Form Requests (Laravel)              |
 | Auth                      | [Session cookies / JWT / Sanctum / Auth.js — fill in]    |
 | Styling                   | Tailwind + Shadcn/Radix (mobile-first)                   |
 
@@ -52,12 +52,12 @@
 ## Data
 
 - Schema notes: `docs/05-database/schema.md`
-- Migrations: [Prisma migrate / Laravel migrations]
+- Migrations: SQLAlchemy Alembic / Laravel migrations
 - Soft deletes: [yes/no for which models]
 
 ## Testing
 
-- Unit / integration: Vitest or Bun test (JS/TS); PHPUnit/Pest (Laravel)
+- Unit / integration: pytest; PHPUnit/Pest (Laravel)
 - E2E: Playwright when UI flows matter
 - Agents must run tests for meaningful changes and `bin/verify` before claiming done
 
@@ -76,7 +76,7 @@
 
 1. Inspect existing code before inventing anything.
 2. Follow `.cursorrules` and `docs/04-standards/`.
-3. Do not add dependencies without need; prefer Bun for JS/TS.
+3. Do not add dependencies without need; prefer uv for Python.
 4. Do not weaken security to pass a test.
 5. Run `bin/verify` before completion.
 

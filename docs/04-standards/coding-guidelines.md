@@ -1,6 +1,6 @@
 # Coding Guidelines & Standards
 
-**Scope:** These guidelines apply universally to the entire repository and all stack components (Laravel/PHP backend, JS/TS frontend, database schemas, scripts, and DevOps infrastructure) immediately upon overlaying or initializing the project via `install.sh`.
+**Scope:** These guidelines apply universally to the entire repository and all stack components (Laravel/PHP backend, Python backend, database schemas, scripts, and DevOps infrastructure) immediately upon overlaying or initializing the project via `install.sh`.
 
 ---
 
@@ -26,8 +26,8 @@ These principles are strictly enforced across **all languages and frameworks**:
 
 ## 2. Dependency & Package Management
 
-- **Bun for JS/TS:** Full-stack JavaScript/TypeScript projects must use **Bun** as the runtime and package manager (`bun install`, `bun run`, `bunx`). Do not use npm, yarn, or pnpm unless explicitly requested.
-- **Lockfile is truth:** Prefer versions already declared in `package.json` / `bun.lock` (or `composer.lock`). Upgrade deliberately, check compatibility, and run `bun run verify`.
+- **uv for Python:** Full-stack Python projects must use **uv** as the runtime and package manager (`uv add`, `uv run`). Do not use pip, poetry or conda unless explicitly requested.
+- **Lockfile is truth:** Prefer versions already declared in `pyproject.toml` / `uv.lock`. Upgrade deliberately, check compatibility, and run `bash bin/verify.sh`.
 - **When adding a dependency:** Pick an explicit **stable** version (no alpha/beta/rc/canary/`@latest` unless the user asks), update the lockfile, and verify. Do not chase “newest” for its own sake.
 - **Lockfile Enforcement:** Always commit updated lockfiles after adding or updating dependencies.
 
@@ -43,49 +43,45 @@ These principles are strictly enforced across **all languages and frameworks**:
 
 ---
 
-## 4. JavaScript & TypeScript Standards
+## 4. Python Standards
 
-- **TypeScript First:** Strongly preferred over plain JavaScript. Use strict mode (`"strict": true`).
-- **No `any` Types:** Use explicit interfaces, types, generics, or `unknown` with runtime type narrowing.
-- **ES Modules Only:** Always use standard ES6 `import`/`export`. Never use CommonJS `require()` or `module.exports`.
-    ```typescript
-    // ✅ DO:
-    import { useState } from 'react';
-    import { User } from '@/models/User';
+- **Python >=3.12:** All Python code must use at least Python version 3.12.
+- **src layout:** Application code lives under `src/<package>/`.
+- **Type hints everywhere:** All functions and classes must include type hints.
+- **mypy:** Run type checking using mypy.
+- **Dataclasses or Pydantic models for structured data:** Use dataclasses or Pydantic v2 models for structured data.
+- **pathlib over os.path:** Use pathlib for file system operations.
+- **f-strings:** Use f-strings for string formatting.
+- **logging module not print:** Use the logging module in library code instead of print statements.
+- **no bare except:** Always specify exceptions to catch.
+- **argparse/typer for CLIs:** Use argparse or typer for command-line interfaces.
+- **small pure functions:** Keep functions focused and small.
+    ```python
+    # ✅ DO:
+    def calculate_total(price: float, tax_rate: float) -> float:
+        return price * (1 + tax_rate)
+
+
+    from __future__ import annotations
+
+
+    def process_user_data(user_info: dict[str, str]) -> User: ...
     ```
-    ```javascript
-    // ❌ DON'T:
-    const express = require('express');
-    module.exports = { ... };
-    ```
-- **Type-Only Imports:** Use explicit `import type` when importing types or interfaces in TypeScript to optimize bundle output:
-    ```typescript
-    import type { UserDTO } from '@/types/user';
-    ```
-- **Import Ordering:** Group imports consistently:
-    1. External/Library dependencies (e.g., `react`, `express`)
-    2. Internal alias imports (e.g., `@/components`, `@/services`)
-    3. Relative imports (e.g., `./Button`, `../utils`)
-    4. Type-only imports (`import type { ... }`)
-- **Formatting Constraints:**
-    - **Indentation:** 4 spaces per tab level.
-    - **Quotes:** Single quotes (`'`) for string literals.
-    - **Semicolons:** Always terminate statements with semicolons.
-    - **Trailing Commas:** Multi-line structures must end with trailing commas (`trailingComma: 'all'`).
 
 ---
 
-## 5. Validation (Zod)
+## 5. Validation (Pydantic)
 
-- **Zod First:** Use Zod for all request, form, env, and API payload validation in JS/TS projects.
-- **React Forms:** When the frontend is React, always use **react-hook-form** (typically with `@hookform/resolvers/zod`) for form state and submission. Do not manage form fields with ad-hoc `useState` for standard form flows.
-- **No Native HTML Validation:** Do not rely on browser constraint validation. Disable it with `noValidate` on forms, and avoid HTML-only checks (`required`, `pattern`, `min`/`max`, `type="email"` as validation, etc.). Surface errors via Zod + accessible UI messaging (`aria-invalid`, `aria-describedby`).
-- **Single Source of Truth:** Prefer shared Zod schemas that can derive TypeScript types via `z.infer<typeof schema>`.
+- **Pydantic v2 First:** Use Pydantic v2 for all request, form, env, and API payload validation in Python projects.
+- **Pydantic-settings for env:** Use pydantic-settings for environment variable parsing.
+- **React Forms:** When a JS/TS frontend exists, always use **react-hook-form** (typically with `@hookform/resolvers/zod`) for form state and submission. Do not manage form fields with ad-hoc `useState` for standard form flows.
+- **No Native HTML Validation:** Do not rely on browser constraint validation. Disable it with `noValidate` on forms, and avoid HTML-only checks (`required`, `pattern`, `min`/`max`, `type="email"` as validation, etc.). Surface errors via Pydantic + accessible UI messaging (`aria-invalid`, `aria-describedby`).
+- **Single Source of Truth:** Prefer shared Pydantic schemas that can derive Python types via `BaseModel`.
 - **Laravel:** When the backend is Laravel, still prefer Zod on the JS/TS frontend; use Form Requests on the PHP side when needed for server enforcement.
 
 ## 6. Data Access (ORM)
 
-- **JS/TS projects (default):** Use **Prisma**. No ad-hoc SQL string building; use the Prisma Client. Document any alternate ORM choice in `docs/00-context/project.md`.
+- **Python projects (default):** Use **SQLAlchemy 2.x + Alembic**. No ad-hoc SQL string building; use SQLAlchemy ORM. Document any alternate ORM choice in `docs/00-context/project.md`.
 - **Laravel/PHP projects:** Use **Eloquent** (and Query Builder where appropriate). Prefer Eloquent models and relationships over raw queries.
 
 ## 7. Frontend HTTP Client
@@ -103,5 +99,5 @@ These principles are strictly enforced across **all languages and frameworks**:
 - **Functions & Components:** Keep functions under 50 lines and components/classes under 150 lines. Extract reusable hooks, sub-components, or helper functions into separate files when logic grows complex.
 - **Early Returns:** Prefer early returns to eliminate deeply nested `if/else` blocks.
 - **Defensive Defaults:** Use nullish coalescing (`??`) and optional chaining (`?.`) instead of logical OR (`||`) when evaluating potentially missing values.
-- **lint-staged + Husky (required for JS/TS):** Every JS/TS project must install `husky` and `lint-staged`, wire `.husky/pre-commit` to `bunx lint-staged`, and ship `.lintstagedrc.json` (preferred over embedding config in `package.json`). Staged files are linted/formatted on commit—do not rely on manual `bun run lint` alone.
-- **Pre-Commit Rule:** Always run linting and code formatting tools via lint-staged on commit (`eslint`/`prettier` for JS/TS; `./vendor/bin/pint` for PHP when present).
+- **pre-commit with ruff format + ruff check (required for Python):** Every Python project must install `pre-commit`, wire `.pre-commit-config.yaml` to `ruff format` and `ruff check`, and run `uv add --dev pre-commit && uv run pre-commit install`. Staged files are linted/formatted on commit—do not rely on manual `ruff check` alone.
+- **Pre-Commit Rule:** Always run linting and code formatting tools via pre-commit on commit (`ruff` for Python; `./vendor/bin/pint` for PHP when present).

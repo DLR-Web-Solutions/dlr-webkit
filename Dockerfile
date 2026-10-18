@@ -1,21 +1,18 @@
-# DLR WebKit — Bun image template.
+# DLR WebKit — Python image template.
 # Consumer projects should customize COPY paths / CMD for their real surfaces.
 # Host ports stay in docker-compose + .env — never hardcode them here.
 
-FROM oven/bun:1.2-alpine AS deps
+FROM python:3.12-slim AS deps
 WORKDIR /app
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
+COPY pyproject.toml uv.lock ./
+RUN pip install uv
 
-FROM oven/bun:1.2-alpine AS runner
+FROM python:3.12-slim AS runner
 WORKDIR /app
-ENV NODE_ENV=production
+COPY --from=deps /usr/local/bin/uv /usr/local/bin/uv
 ENV PORT=8000
-COPY --from=deps /app/node_modules ./node_modules
-COPY package.json bun.lock ./
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
 COPY . .
-
 EXPOSE 8000
-# Template process that serves GET /health and GET /ready.
-# Replace with your real server entrypoint (e.g. src/server/index.ts) in product apps.
-CMD ["bun", "src/server/health.ts"]
+CMD ["uv", "run", "--no-dev", "python", "src/server/health.py"]

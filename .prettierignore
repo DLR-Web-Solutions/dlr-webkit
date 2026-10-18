@@ -1,7 +1,0 @@
-node_modules
-dist
-build
-coverage
-bun.lock
-*.min.js
-.husky/_

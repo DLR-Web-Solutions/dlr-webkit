@@ -1,0 +1,25 @@
+[project]
+name = "dlr-webkit"
+version = "0.2.0"
+description = "DLR WebKit — personal AI-native development kit (Python branch)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = ["ruff>=0.8,<1", "pytest>=8,<9", "mypy>=1.13,<2", "pre-commit>=4,<5"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src", "tests"]

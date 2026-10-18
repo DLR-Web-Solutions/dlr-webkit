@@ -22,13 +22,19 @@ echo "=========================================="
 
 echo ""
 echo "Runtime"
-if command -v bun >/dev/null 2>&1; then
-  ok "bun $(bun --version)"
+if command -v python3 >/dev/null 2>&1; then
+  ok "python3 $(python3 --version)"
 else
-  if [ -f package.json ]; then
-    bad "bun not found (required when package.json is present)"
+  bad "python3 not found (required for Python projects)"
+fi
+
+if command -v uv >/dev/null 2>&1; then
+  ok "uv $(uv --version)"
+else
+  if [ -f pyproject.toml ]; then
+    bad "uv not found (required when pyproject.toml is present)"
   else
-    warn "bun not found"
+    warn "uv not found"
   fi
 fi
 
@@ -48,19 +54,10 @@ else
   bad "src/ directory missing"
 fi
 
-if [ -f package.json ] || [ -f composer.json ]; then
-  manifests=""
-  [ -f package.json ] && manifests="package.json"
-  if [ -f composer.json ]; then
-    if [ -n "$manifests" ]; then
-      manifests="$manifests, composer.json"
-    else
-      manifests="composer.json"
-    fi
-  fi
-  ok "package manifest present ($manifests)"
+if [ -f pyproject.toml ]; then
+  ok "package manifest present (pyproject.toml)"
 else
-  warn "no package.json or composer.json yet (expected after scaffolding)"
+  warn "no pyproject.toml yet (expected after scaffolding)"
 fi
 
 echo ""
@@ -79,16 +76,16 @@ done
 
 echo ""
 echo "Dependencies"
-if [ -f package.json ]; then
-  if [ -d node_modules ]; then
-    ok "node_modules present"
+if [ -f pyproject.toml ]; then
+  if [ -d .venv ]; then
+    ok ".venv present"
   else
-    warn "node_modules missing — run: bun install"
+    warn ".venv missing — run: uv sync"
   fi
-  if [ -f bun.lock ] || [ -f bun.lockb ]; then
-    ok "bun lockfile present"
+  if [ -f uv.lock ]; then
+    ok "uv.lock present"
   else
-    warn "no bun.lock — run bun install and commit the lockfile"
+    warn "no uv.lock — run uv lock and commit the lockfile"
   fi
 fi
 
@@ -171,15 +168,25 @@ fi
 
 echo ""
 echo "Quality hooks"
-if [ -f .husky/pre-commit ]; then
-  ok "husky pre-commit present"
-  if grep -q 'lint-staged' .husky/pre-commit; then
-    ok "pre-commit invokes lint-staged"
+if [ -f .pre-commit-config.yaml ]; then
+  ok ".pre-commit-config.yaml present"
+  if grep -q "ruff" .pre-commit-config.yaml; then
+    ok "pre-commit runs ruff"
   else
-    warn "pre-commit does not appear to run lint-staged"
+    warn "pre-commit does not appear to run ruff"
   fi
 else
-  warn "missing .husky/pre-commit"
+  warn "missing .pre-commit-config.yaml"
+fi
+
+if [ -f .git/hooks/pre-commit ]; then
+  if grep -q "pre-commit" .git/hooks/pre-commit; then
+    ok "git pre-commit hook installed"
+  else
+    warn "pre-commit hook not installed — run: uv run pre-commit install"
+  fi
+else
+  warn "pre-commit hook not installed — run: uv run pre-commit install"
 fi
 
 echo ""

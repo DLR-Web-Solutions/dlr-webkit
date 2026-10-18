@@ -3,17 +3,17 @@
 > **Status: TEMPLATE** — replace bracketed choices during `/init`.
 
 - Surfaces: `src/client`, `src/server` (+ more only if needed)
-- Runtime (JS/TS): Bun (**required** for JS/TS)
-- Framework: [e.g., Hono / Express / Next.js / Laravel]
-- Language: TypeScript / PHP 8.3+
+- Runtime (Python): uv (**required** for Python)
+- Framework: [e.g., FastAPI / Django / Flask]
+- Language: Python 3.12+ / PHP 8.3+
 - Database: PostgreSQL (recommended)
-- ORM: Prisma (JS/TS) / Eloquent (Laravel) — **defaults**; document exceptions
+- ORM: SQLAlchemy 2.x + Alembic (Python) / Eloquent (Laravel) — **defaults**; document exceptions
 - Architecture: Controllers → Services → Repositories (**default** backend split); domain-nest when crowded
-- Validation: Zod (**required** for JS/TS); React → react-hook-form + Zod
+- Validation: Pydantic v2 (**required** for Python); React → react-hook-form + Zod
 - Frontend HTTP: Axios (**default** shared client)
 - Styling: Tailwind CSS + Radix UI / Shadcn (mobile-first, granular UI)
 - UI/UX: Loading states required for async waits
-- Testing: Bun test or Vitest; Playwright for critical E2E
-- Tooling: Husky + lint-staged; `bun run doctor` + `bun run verify`
+- Testing: pytest; Playwright for critical E2E
+- Tooling: pre-commit; `bash bin/doctor.sh` + `bash bin/verify.sh`
 - Containers: Docker Compose **conditional** (only when DB/workers/container deploy help)
-- AI (optional): Provider interface + Zod-validated structured output
+- AI (optional): Provider interface + Pydantic-validated structured output

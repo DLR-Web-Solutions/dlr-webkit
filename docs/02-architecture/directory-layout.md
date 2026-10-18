@@ -22,7 +22,7 @@ Inside each backend surface, organize as **Controllers → Services → Reposito
 src/server/
   controllers/     # HTTP / route handlers only (thin)
   services/        # Business logic & orchestration
-  repositories/    # Data access (Prisma / Eloquent / DB)
+  repositories/    # Data access (SQLAlchemy / Eloquent / DB)
   ai/              # Optional: prompts, provider adapters (AI apps only)
   jobs/            # Optional: async workers
 ```

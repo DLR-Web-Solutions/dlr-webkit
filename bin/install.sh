@@ -96,13 +96,6 @@ echo "🚀 Copying AI DevKit files to parent directory..."
 copy_dir_merge "$DEVKIT_DIR/docs" "$PARENT_DIR/docs"
 copy_dir_merge "$DEVKIT_DIR/prompts" "$PARENT_DIR/prompts"
 copy_dir_merge "$DEVKIT_DIR/bin" "$PARENT_DIR/bin"
-# husky: only merge tracked hook scripts, not generated _
-if [ -d "$DEVKIT_DIR/.husky" ]; then
-  mkdir -p "$PARENT_DIR/.husky"
-  if [ -f "$DEVKIT_DIR/.husky/pre-commit" ]; then
-    copy_file "$DEVKIT_DIR/.husky/pre-commit" "$PARENT_DIR/.husky/pre-commit"
-  fi
-fi
 copy_dir_merge "$DEVKIT_DIR/.github" "$PARENT_DIR/.github"
 copy_dir_merge "$DEVKIT_DIR/.vscode" "$PARENT_DIR/.vscode"
 copy_dir_merge "$DEVKIT_DIR/.cursor" "$PARENT_DIR/.cursor"
@@ -122,13 +115,12 @@ fi
 copy_file "$DEVKIT_DIR/CLAUDE.md" "$PARENT_DIR/CLAUDE.md"
 copy_file "$DEVKIT_DIR/.cursorrules" "$PARENT_DIR/.cursorrules"
 copy_file "$DEVKIT_DIR/.mcp.json" "$PARENT_DIR/.mcp.json"
-copy_file "$DEVKIT_DIR/eslint.config.js" "$PARENT_DIR/eslint.config.js"
-copy_file "$DEVKIT_DIR/.prettierrc" "$PARENT_DIR/.prettierrc"
-copy_file "$DEVKIT_DIR/.lintstagedrc.json" "$PARENT_DIR/.lintstagedrc.json"
-copy_file "$DEVKIT_DIR/tsconfig.json" "$PARENT_DIR/tsconfig.json"
 copy_file "$DEVKIT_DIR/docker-compose.yml" "$PARENT_DIR/docker-compose.yml"
 copy_file "$DEVKIT_DIR/Dockerfile" "$PARENT_DIR/Dockerfile"
 copy_file "$DEVKIT_DIR/.env.example" "$PARENT_DIR/.env.example"
+copy_file "$DEVKIT_DIR/pyproject.toml" "$PARENT_DIR/pyproject.toml"
+copy_file "$DEVKIT_DIR/.pre-commit-config.yaml" "$PARENT_DIR/.pre-commit-config.yaml"
+copy_file "$DEVKIT_DIR/.python-version" "$PARENT_DIR/.python-version"
 # Never copy .env
 
 if [ -f "$DEVKIT_DIR/.gitignore" ]; then
@@ -170,11 +162,13 @@ replace_placeholder docs
 [ -f CLAUDE.md ] && replace_placeholder CLAUDE.md
 [ -f .cursorrules ] && replace_placeholder .cursorrules
 [ -f README.md ] && replace_placeholder README.md
+[ -f pyproject.toml ] && replace_placeholder pyproject.toml
+[ -f .env.example ] && replace_placeholder .env.example
 
 chmod +x bin/*.sh 2>/dev/null || true
 
 echo "✨ DevKit files placed in '$PARENT_FOLDER_NAME'."
-echo "Next: copy .env.example → .env, run bun install, then bun run doctor."
+echo "Next: copy .env.example → .env, run uv sync, uv run pre-commit install, then bash bin/doctor.sh."
 
 DEVKIT_FOLDER_NAME="$(basename "$DEVKIT_DIR")"
 echo "------------------------------------------"

@@ -28,7 +28,7 @@ Commits in this repo must use **Joshua \<dev.joshuadolor@gmail.com\>**. See `doc
 `UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW → DOCUMENT`
 
 - Meaningful changes need tests.
-- Completion requires `bin/verify` (or `bun run verify`) passing.
+- Completion requires `bash bin/verify.sh` passing.
 - Do not claim success without verification.
 
 ## Shortcuts
@@ -42,6 +42,6 @@ Commits in this repo must use **Joshua \<dev.joshuadolor@gmail.com\>**. See `doc
 ## Diagnostics
 
 ```bash
-bun run doctor   # bash bin/doctor.sh
-bun run verify   # bash bin/verify.sh
+bash bin/doctor.sh
+bash bin/verify.sh
 ```

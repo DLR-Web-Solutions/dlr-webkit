@@ -46,3 +46,14 @@ blob-report/
 
 # Docker
 postgres_data/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/

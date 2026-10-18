@@ -27,12 +27,12 @@ AI_BASE_URL=http://localhost:11434
 # GOOGLE_API_KEY=
 ```
 
-Validate env with Zod. Local/dev may use Ollama; production picks a hosted provider explicitly.
+Validate env with Pydantic. Local/dev may use Ollama; production picks a hosted provider explicitly.
 
 ## Structured output (required pattern)
 
 ```
-LLM → structured output → Zod schema parse → application logic
+LLM → structured output → Pydantic schema parse → application logic
 ```
 
 Treat model text as **untrusted input**. Prefer schema-constrained decoding / tool calls / JSON mode, then `schema.parse(...)`. On failure: retry once with repair instructions or fail safely—never silently trust partial JSON.
@@ -45,4 +45,4 @@ Treat model text as **untrusted input**. Prefer schema-constrained decoding / to
 
 ## Evaluation (minimal)
 
-For critical classifiers or extractors, keep a small fixture set (input → expected schema / label) runnable via `bun test`. Expand only when regressions appear—do not build an eval platform in the kit.
+For critical classifiers or extractors, keep a small fixture set (input → expected schema / label) runnable via `uv run pytest`. Expand only when regressions appear—do not build an eval platform in the kit.

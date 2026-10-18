@@ -29,45 +29,57 @@ UI components MUST NEVER consume raw backend API payloads directly. All incoming
 
 ### Frontend Entity / Adapter Definition
 
-```typescript
-type UserPayload = {
-    id?: number | null;
-    first_name?: string | null;
-    last_name?: string | null;
-    birth_date?: string | null;
-};
+```python
+from dataclasses import dataclass
+from typing import Optional
+from datetime import date
 
-export class User {
-    readonly id: number | null;
-    readonly firstName: string;
-    readonly lastName: string;
-    readonly birthDate: Date | null;
 
-    constructor(data: UserPayload = {}) {
-        this.id = data.id ?? null;
-        this.firstName = data.first_name ?? '<not given>';
-        this.lastName = data.last_name ?? '';
-        this.birthDate = data.birth_date ? new Date(data.birth_date) : null;
-    }
+@dataclass
+class UserPayload:
+    id: Optional[int] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    birth_date: Optional[str] = None
 
-    get fullName(): string {
-        return `${this.firstName} ${this.lastName}`.trim();
-    }
-}
+
+@dataclass
+class User:
+    id: Optional[int]
+    first_name: str
+    last_name: str
+    birth_date: Optional[date]
+
+    def __init__(self, data: UserPayload = None):
+        if data is None:
+            data = UserPayload()
+
+        self.id = data.id
+        self.first_name = data.first_name or "<not given>"
+        self.last_name = data.last_name or ""
+        self.birth_date = date.fromisoformat(data.birth_date) if data.birth_date else None
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}".strip()
 ```
 
 ### Usage in Service Layer & Components
 
-```typescript
-// Service
-export async function getUser(id: number): Promise<User> {
-    const response = await api.get<UserPayload>(`/users/${id}`);
-    return new User(response.data);
-}
+```python
+# Service
+from typing import Dict, Any
 
-// UI Component
-const user = await getUser(1);
-console.log(user.fullName); // "Josh Dolor"
+
+def get_user(id: int) -> User:
+    response_data: Dict[str, Any] = api.get(f"/users/{id}")
+    payload = UserPayload(**response_data)
+    return User(payload)
+
+
+# UI Component
+user = get_user(1)
+print(user.full_name)  # "Josh Dolor"
 ```
 
 ---
@@ -102,69 +114,99 @@ console.log(user.fullName); // "Josh Dolor"
 
 ### Collection Adapter Definition
 
-```typescript
-import { User, type UserPayload } from './User';
+```python
+from dataclasses import dataclass, field
+from typing import List, Optional
+from datetime import date
 
-type UsersListPayload = {
-    data?: UserPayload[];
-    pagination?: {
-        total_records?: number;
-        current_page?: number;
-        per_page?: number;
-    };
-};
 
-export class UserCollection {
-    readonly items: User[];
-    readonly total: number;
-    readonly page: number;
-    readonly perPage: number;
+@dataclass
+class UserPayload:
+    id: Optional[int] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    birth_date: Optional[str] = None
 
-    constructor(payload: UsersListPayload = {}) {
-        const rawItems = Array.isArray(payload.data) ? payload.data : [];
-        this.items = rawItems.map((item) => new User(item));
 
-        const meta = payload.pagination ?? {};
-        this.total = meta.total_records ?? 0;
-        this.page = meta.current_page ?? 1;
-        this.perPage = meta.per_page ?? 10;
-    }
+@dataclass
+class User:
+    id: Optional[int]
+    first_name: str
+    last_name: str
+    birth_date: Optional[date]
 
-    get isEmpty(): boolean {
-        return this.items.length === 0;
-    }
+    def __init__(self, data: UserPayload = None):
+        if data is None:
+            data = UserPayload()
 
-    get hasMorePages(): boolean {
-        return this.page * this.perPage < this.total;
-    }
-}
+        self.id = data.id
+        self.first_name = data.first_name or "<not given>"
+        self.last_name = data.last_name or ""
+        self.birth_date = date.fromisoformat(data.birth_date) if data.birth_date else None
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}".strip()
+
+
+@dataclass
+class UsersListPayload:
+    data: Optional[List[UserPayload]] = None
+    pagination: Optional[dict] = None
+
+
+@dataclass
+class UserCollection:
+    items: List[User]
+    total: int
+    page: int
+    per_page: int
+
+    def __init__(self, payload: UsersListPayload = None):
+        if payload is None:
+            payload = UsersListPayload()
+
+        raw_items = payload.data or []
+        self.items = [User(item) for item in raw_items]
+
+        meta = payload.pagination or {}
+        self.total = meta.get("total_records", 0)
+        self.page = meta.get("current_page", 1)
+        self.per_page = meta.get("per_page", 10)
+
+    @property
+    def is_empty(self) -> bool:
+        return len(self.items) == 0
+
+    @property
+    def has_more_pages(self) -> bool:
+        return self.page * self.per_page < self.total
 ```
 
 ### Usage in Service Layer & Components
 
-```typescript
-// Service
-export async function fetchUsers(page = 1): Promise<UserCollection> {
-    const response = await api.get<UsersListPayload>(`/users?page=${page}`);
-    return new UserCollection(response.data);
-}
+```python
+# Service
+def fetch_users(page: int = 1) -> UserCollection:
+    response_data = api.get(f"/users?page={page}")
+    payload = UsersListPayload(**response_data)
+    return UserCollection(payload)
 
-// UI Component
-const collection = await fetchUsers(1);
 
-if (collection.isEmpty) {
-    showEmptyState();
-} else {
-    for (const user of collection.items) {
-        console.log(user.fullName);
-    }
-}
+# UI Component
+collection = fetch_users(1)
+
+if collection.is_empty:
+    show_empty_state()
+else:
+    for user in collection.items:
+        print(user.full_name)
 ```
 
 ---
 
 ## AI Agent Instruction Requirements
 
-- When generating API integration logic or data hooks, always construct an explicit Adapter / Entity mapping function or class in TypeScript.
+- When generating API integration logic or data hooks, always construct an explicit Adapter / Entity mapping function or class in Python.
 - Prefer `??` and optional chaining for missing values.
 - Do not access snake_case backend keys directly inside frontend UI components.

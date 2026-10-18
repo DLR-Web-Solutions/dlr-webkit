@@ -56,6 +56,21 @@ replace_in docs
 [ -f CLAUDE.md ] && replace_in CLAUDE.md
 [ -f .cursorrules ] && replace_in .cursorrules
 [ -f README.md ] && replace_in README.md
+[ -f pyproject.toml ] && replace_in pyproject.toml
+[ -f .env.example ] && replace_in .env.example
+
+# pyproject.toml: rename the kit's distribution name to a PEP 508-safe slug of the project name.
+if [ -f pyproject.toml ] && grep -q '^name = "dlr-webkit"$' pyproject.toml; then
+  SLUG="$(printf '%s' "$APP_NAME" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')"
+  if [ -n "$SLUG" ]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      sed -i '' "s|^name = \"dlr-webkit\"$|name = \"${SLUG}\"|" pyproject.toml
+    else
+      sed -i "s|^name = \"dlr-webkit\"$|name = \"${SLUG}\"|" pyproject.toml
+    fi
+    echo "✅ pyproject.toml name set to ${SLUG} (run uv lock to refresh uv.lock)."
+  fi
+fi
 
 echo "✅ Placeholders updated for project name."
 echo "Next: fill docs/00-context/project.md (or run /init with an AI agent)."

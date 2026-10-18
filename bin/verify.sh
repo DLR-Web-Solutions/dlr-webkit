@@ -38,79 +38,56 @@ run_step() {
   FAILED_STEP=""
 }
 
-has_script() {
-  local key="$1"
-  # key is always a literal from this script — never pass untrusted input here
-  bun -e "import p from './package.json' with { type: 'json' }; process.exit(p.scripts?.['${key}'] ? 0 : 1)"
-}
-
 has_test_files() {
   local found
-  found="$(find . -type f \( -name '*.test.ts' -o -name '*.test.tsx' -o -name '*.test.js' -o -name '*.spec.ts' -o -name '*.spec.tsx' \) \
-    ! -path './node_modules/*' ! -path './.git/*' 2>/dev/null | head -n 1 || true)"
+  found="$(find . -type f \( -name 'test_*.py' -o -name '*_test.py' \) \
+    ! -path './.venv/*' ! -path './.git/*' 2>/dev/null | head -n 1 || true)"
   [ -n "$found" ]
 }
 
 # 0) Kit integrity (always)
 run_step "doctor" bash "$ROOT_DIR/bin/doctor.sh"
 
-if [ ! -f package.json ]; then
+if [ ! -f pyproject.toml ]; then
   echo ""
-  echo "No package.json — doctor-only verification complete."
+  echo "No pyproject.toml — doctor-only verification complete."
   echo "=========================================="
   echo "  ✔ verify passed"
   echo "=========================================="
   exit 0
 fi
 
-if [ ! -d node_modules ]; then
+if [ ! -d .venv ]; then
   echo ""
-  echo "→ install (node_modules missing)"
+  echo "→ install (.venv missing)"
   FAILED_STEP="install"
-  bun install
+  uv sync
   echo "  ✔ install"
   FAILED_STEP=""
 fi
 
-if has_script format:check; then
-  run_step "format:check" bun run format:check
-fi
+run_step "ruff format --check" uv run ruff format --check .
+run_step "ruff check" uv run ruff check .
 
-if has_script lint; then
-  run_step "lint" bun run lint
-fi
-
-if [ -f tsconfig.json ] && has_script typecheck; then
-  run_step "typecheck" bun run typecheck
+if grep -q '^\[tool.mypy\]' pyproject.toml; then
+  run_step "mypy" uv run mypy .
 fi
 
 if [ "${DLR_VERIFY_SKIP_TESTS:-0}" = "1" ]; then
   echo ""
   echo "→ test (skipped — DLR_VERIFY_SKIP_TESTS=1)"
 elif has_test_files; then
-  if has_script test; then
-    run_step "test" bun run test
-  else
-    run_step "test" bun test
-  fi
+  run_step "pytest" uv run pytest -q
 else
   echo ""
-  echo "→ test (skipped — no *.test.* / *.spec.* files)"
+  echo "→ test (skipped — no test_*.py files)"
 fi
 
-if has_script build; then
-  run_step "build" bun run build
-fi
-
-FAILED_STEP="bun audit"
-echo ""
-echo "→ bun audit"
-bun audit
-echo "  ✔ bun audit"
-FAILED_STEP=""
-
-if has_script test:e2e; then
-  run_step "test:e2e" bun run test:e2e
+if [ "${DLR_VERIFY_SKIP_AUDIT:-0}" = "1" ]; then
+  echo ""
+  echo "→ audit (skipped — DLR_VERIFY_SKIP_AUDIT=1)"
+else
+  run_step "pip-audit" uvx pip-audit==2.9.0 --progress-spinner off
 fi
 
 echo ""

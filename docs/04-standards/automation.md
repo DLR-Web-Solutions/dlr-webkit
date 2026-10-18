@@ -13,11 +13,12 @@
 | `bin/doctor.sh`  | Diagnoses runtime, env, docker, hooks, kit files | Setup issues; before debugging “works on my machine” |
 | `bin/verify.sh`  | Format, lint, typecheck, tests, audit (+ doctor) | Before claiming a feature/fix complete; CI           |
 
-Package shortcuts (when `package.json` is present):
+Everyday commands (when `pyproject.toml` is present):
 
 ```bash
-bun run doctor
-bun run verify
+uv sync
+bash bin/doctor.sh
+bash bin/verify.sh
 ```
 
 Non-interactive / safety env vars:
@@ -31,18 +32,16 @@ Non-interactive / safety env vars:
 
 ---
 
-## Required Repo Tooling (JS/TS)
+## Required Repo Tooling (Python)
 
-When scaffolding or bootstrapping a JS/TS app from this kit, ensure:
+When scaffolding or bootstrapping a Python app from this kit, ensure:
 
 | Piece                | Purpose                                     |
 | :------------------- | :------------------------------------------ |
-| `husky`              | Git hooks                                   |
-| `lint-staged`        | Run linters/formatters on staged files only |
-| `.husky/pre-commit`  | Runs `bunx lint-staged`                     |
-| `.lintstagedrc.json` | Maps globs → `eslint` / `prettier` / `pint` |
+| `pre-commit`              | Git hooks                                   |
+| `.pre-commit-config.yaml`        | Run linters/formatters on staged files only |
 
-Install with: `bun add -d husky lint-staged` and `"prepare": "husky"` in `package.json`.
+Install with: `uv add --dev pre-commit && uv run pre-commit install`.
 
 ---
 

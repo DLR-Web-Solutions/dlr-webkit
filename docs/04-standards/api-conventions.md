@@ -10,8 +10,8 @@ Apply when the project exposes HTTP APIs. Skip sections that do not fit the chos
 
 ## Validation
 
-- Validate all inputs with **Zod** (JS/TS) or Form Requests (Laravel).
-- Reject unknown critical fields when abuse is a concern (`z.object({...}).strict()` where appropriate).
+- Validate all inputs with **Pydantic** (Python) or Form Requests (Laravel).
+- Reject unknown critical fields when abuse is a concern (`BaseModel` with `extra='forbid'` where appropriate).
 
 ## Errors
 

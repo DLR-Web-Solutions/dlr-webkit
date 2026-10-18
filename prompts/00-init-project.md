@@ -25,17 +25,17 @@ Propose a minimal role set (e.g. Admin, User, Guest) and confirm.
 Recommend or confirm stack. **Kit defaults** unless overridden:
 
 - **Surfaces:** Code under `src/client`, `src/server` (add more servers only if needed)
-- **Runtime (JS/TS):** Bun (**required**)
+- **Runtime (JS/TS):** Python 3.12 + uv (**required**)
 - **Backend:** Prefer a single cohesive server (Hono/Express/Next handlers/Laravel)—no microservices by default
 - **Frontend:** React + Vite or framework already chosen; mobile-first Tailwind + Shadcn/Radix
 - **Database:** PostgreSQL (recommended)
-- **ORM:** Prisma (JS/TS) / Eloquent (Laravel) — **defaults**
-- **Validation:** Zod (**required** for JS/TS); React forms → react-hook-form + Zod; `noValidate`
+- **ORM:** SQLAlchemy + Alembic — **defaults**
+- **Validation:** Pydantic (**required** for Python); React forms → react-hook-form + Zod; `noValidate`
 - **Frontend HTTP:** Axios (**default**)
 - **Architecture:** Controllers → Services → Repositories (**default**); domain-nest folders when crowded
-- **Tooling:** Husky + lint-staged; `bun run doctor` + `bun run verify`
+- **Tooling:** pre-commit (ruff, mypy); `bash bin/doctor.sh` + `bash bin/verify.sh`
 - **Containers:** Docker Compose **only when useful** (DB/workers/deploy)—never solely for a rule
-- **AI apps (only if needed):** Provider abstraction + structured output + Zod (`docs/02-architecture/ai-providers.md`)
+- **AI apps (only if needed):** Provider abstraction + structured output + Pydantic (`docs/02-architecture/ai-providers.md`)
 - **SaaS:** Users/roles now; multi-tenant only if requested—do not force tenancy
 - **Versions:** Prefer lockfile versions; deliberate upgrades; never instruct `@latest`
 
@@ -45,7 +45,7 @@ Ask about authentication preference, must-have business rules, and whether soft 
 
 ### Step 5: Testing & Deployment Expectations
 
-Confirm: unit+integration tests (Vitest or Bun test / Pest), Playwright for critical UI flows, and whether Docker Compose is actually needed.
+Confirm: unit+integration tests (pytest / Pest), Playwright for critical UI flows, and whether Docker Compose is actually needed.
 
 ### Step 6: Document Generation
 
@@ -67,4 +67,4 @@ When the stack includes a frontend, create the **kitchen sink** page before prod
 - Note path/route in `docs/00-context/project.md`
 - Do not auto-launch UI/UX designer agents—instructions only
 
-Stop after writing docs (and kitchen sink when scaffolding UI). Summarize what was generated and remind the user to run `bun run doctor` after scaffolding code.
+Stop after writing docs (and kitchen sink when scaffolding UI). Summarize what was generated and remind the user to run `bash bin/doctor.sh` after scaffolding code.

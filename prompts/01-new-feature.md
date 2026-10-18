@@ -9,5 +9,5 @@ Follow the agent workflow: UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TES
 5. Output a brief implementation plan (files to touch + tests) before coding.
 6. Implement with small, focused diffs—no unrelated refactors.
 7. Add/update tests for meaningful behavior.
-8. Run `bin/verify` (or `bun run verify`) before claiming done.
+8. Run `bash bin/verify.sh` before claiming done.
 9. Update feature docs / project context only if architecture or contracts changed.

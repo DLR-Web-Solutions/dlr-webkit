@@ -27,10 +27,10 @@ All Docker container **host** bindings MUST be driven dynamically by `.env` vari
 
 | Service  | Probe                                                                                                                 |
 | :------- | :-------------------------------------------------------------------------------------------------------------------- |
-| App      | HTTP `GET /health` on the container port (liveness). Do **not** use `bun --version` or similar as an app healthcheck. |
+| App      | HTTP `GET /health` on the container port (liveness). Do **not** use `python --version` or similar as an app healthcheck. |
 | Database | `pg_isready` (or engine equivalent) — separate from app liveness.                                                     |
 
-Kit template: `src/server/health.ts` serves `/health` and `/ready`. Product apps should replace the process with the real server and keep (or extend) those routes.
+Kit template: `src/server/health.py` serves `/health` and `/ready`. Product apps should replace the process with the real server and keep (or extend) those routes.
 
 ## Secrets
 

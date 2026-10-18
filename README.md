@@ -5,7 +5,7 @@
 ## What it is
 
 - A reusable **kit** (rules, docs, prompts, scripts, CI defaults)
-- Optimized for **Bun**-based JS/TS apps (Laravel/PHP patterns documented where relevant)
+- Optimized for **Python** projects managed with **uv** (this is the `python` branch; `master` is the Bun/JS edition)
 - An agent operating system: inspect → implement → test → `verify`
 
 ## What it is not
@@ -44,12 +44,13 @@ Ask an agent to run `/init` — it follows `prompts/00-init-project.md` and fill
 ### Day-to-day
 
 ```bash
-bun install
-bun run doctor   # → bash bin/doctor.sh
-bun run verify   # → bash bin/verify.sh (format, lint, typecheck, tests, audit)
+uv sync
+uv run pre-commit install
+bash bin/doctor.sh
+bash bin/verify.sh
 ```
 
-A change is not done until `bun run verify` passes.
+A change is not done until `bash bin/verify.sh` passes.
 
 ## Layout
 
