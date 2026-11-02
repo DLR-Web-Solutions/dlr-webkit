@@ -6,7 +6,7 @@
 
 - A reusable **kit** (rules, docs, prompts, scripts, CI defaults)
 - Optimized for **Bun**-based JS/TS apps (Laravel/PHP patterns documented where relevant)
-- An agent operating system: inspect → implement → test → `verify`
+- An agent operating system: inspect → test (red) → implement (green) → refactor → `verify`
 
 ## What it is not
 
@@ -49,7 +49,7 @@ bun run doctor   # → bash bin/doctor.sh
 bun run verify   # → bash bin/verify.sh (format, lint, typecheck, tests, audit)
 ```
 
-A change is not done until `bun run verify` passes.
+TDD is mandatory (RED → GREEN → REFACTOR), and a change is not done until `bun run verify` passes.
 
 ## Layout
 
@@ -73,7 +73,7 @@ CLAUDE.md            # Short agent entry → .cursorrules + context
 4. `prompts/` — task playbooks
 5. `.cursor/skills/` + `.claude/skills/` — tool-specific skills (same content; keep paired)
 
-Workflow: `UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW → DOCUMENT`
+Workflow: `UNDERSTAND → INSPECT → PLAN → TEST (red) → IMPLEMENT (green) → REFACTOR → VERIFY → REVIEW → DOCUMENT`
 
 ## Versions
 

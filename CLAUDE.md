@@ -25,9 +25,9 @@ Commits in this repo must use **Joshua \<dev.joshuadolor@gmail.com\>**. See `doc
 
 ## Workflow
 
-`UNDERSTAND → INSPECT → PLAN → IMPLEMENT → TEST → VERIFY → REVIEW → DOCUMENT`
+`UNDERSTAND → INSPECT → PLAN → TEST (red) → IMPLEMENT (green) → REFACTOR → VERIFY → REVIEW → DOCUMENT`
 
-- Meaningful changes need tests.
+- **TDD is mandatory:** write a failing test first, then the minimal implementation, then refactor. No production behavior without a failing test. Bug fixes start with a failing regression test. Only throwaway spikes, pure docs/config, or genuinely untestable glue are exempt—state why.
 - Completion requires `bin/verify` (or `bun run verify`) passing.
 - Do not claim success without verification.
 

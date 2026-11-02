@@ -45,7 +45,7 @@ Ask about authentication preference, must-have business rules, and whether soft 
 
 ### Step 5: Testing & Deployment Expectations
 
-Confirm: unit+integration tests (Vitest or Bun test / Pest), Playwright for critical UI flows, and whether Docker Compose is actually needed.
+Confirm: unit+integration tests (Vitest or Bun test / Pest), Playwright for critical UI flows, and whether Docker Compose is actually needed. State that **TDD is mandatory** (RED → GREEN → REFACTOR) so every feature/bug-fix starts with a failing test.
 
 ### Step 6: Document Generation
 

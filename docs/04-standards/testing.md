@@ -2,6 +2,19 @@
 
 > Prefer the stack already present in the consumer project. For new JS/TS apps from this kit: **Bun test** or **Vitest** for unit/integration; **Playwright** for critical E2E. Do not install a second unit runner without reason.
 
+## Test-driven development (mandatory)
+
+All behavior changes follow **TDD: RED → GREEN → REFACTOR**.
+
+1. **RED** — Write/update the smallest test for the next behavior. Run it and confirm it fails for the expected reason (not a typo or missing import).
+2. **GREEN** — Write the minimal implementation that makes the test pass. Do not add unrequested behavior.
+3. **REFACTOR** — Improve names/structure with the suite still green. Re-run narrow tests, then `bin/verify`.
+
+- **Bug fixes:** the first commit-sized change is a failing regression test; then fix production code.
+- **Refactors:** keep existing tests green; add characterization tests first where coverage is missing.
+- **Exceptions:** throwaway spikes, pure docs/config, or genuinely untestable glue. State the exception explicitly; convert any kept spike into tested code before merging.
+- Never write production behavior first and “add tests after.” If a test is hard to write, improve the seam instead of skipping TDD.
+
 ## Strategy
 
 | Layer       | What to test                                                     | Tooling                                      |

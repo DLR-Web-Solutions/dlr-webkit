@@ -20,6 +20,25 @@ describe('kit integrity', () => {
         }
     });
 
+    test('agent rules mandate test-driven development', async () => {
+        for (const rel of [
+            '.cursorrules',
+            'CLAUDE.md',
+            'docs/04-standards/testing.md',
+            'prompts/01-new-feature.md',
+            'prompts/02-bug-fix.md',
+        ]) {
+            const text = await Bun.file(join(root, rel)).text();
+            expect(text).toMatch(/test-driven|TDD|test-first/i);
+        }
+
+        const rules = await Bun.file(join(root, '.cursorrules')).text();
+        expect(rules).toMatch(/RED\s*→\s*GREEN\s*→\s*REFACTOR/i);
+        expect(rules.indexOf('TEST (red)')).toBeLessThan(
+            rules.indexOf('IMPLEMENT (green)'),
+        );
+    });
+
     test('package scripts expose doctor and verify', async () => {
         const pkg = await Bun.file(join(root, 'package.json')).json();
         expect(pkg.scripts.doctor).toContain('doctor');

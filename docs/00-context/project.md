@@ -57,9 +57,11 @@
 
 ## Testing
 
+- **TDD is mandatory:** RED → GREEN → REFACTOR. Write a failing test before production behavior; bug fixes start with a failing regression test.
 - Unit / integration: Vitest or Bun test (JS/TS); PHPUnit/Pest (Laravel)
 - E2E: Playwright when UI flows matter
-- Agents must run tests for meaningful changes and `bin/verify` before claiming done
+- Exceptions (state why): throwaway spikes, pure docs/config, or genuinely untestable glue
+- Agents must run tests and `bin/verify` before claiming done
 
 ## Deployment
 
@@ -76,9 +78,10 @@
 
 1. Inspect existing code before inventing anything.
 2. Follow `.cursorrules` and `docs/04-standards/`.
-3. Do not add dependencies without need; prefer Bun for JS/TS.
-4. Do not weaken security to pass a test.
-5. Run `bin/verify` before completion.
+3. Practice TDD: failing test first, minimal implementation, then refactor.
+4. Do not add dependencies without need; prefer Bun for JS/TS.
+5. Do not weaken security to pass a test.
+6. Run `bin/verify` before completion.
 
 ## Related docs
 
