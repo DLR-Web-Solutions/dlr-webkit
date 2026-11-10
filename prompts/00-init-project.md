@@ -60,10 +60,11 @@ Update these files (do not invent parallel doc trees):
 
 ### Step 7: UI Kitchen Sink (before product screens)
 
-When the stack includes a frontend, create the **kitchen sink** page before product UI. Follow `.cursor/skills/ui-kitchen-sink/SKILL.md` or `.claude/skills/ui-kitchen-sink/SKILL.md`, and `docs/04-standards/ui-accessibility.md`.
+When the stack includes a frontend, follow `docs/04-standards/ui-architecture.md` before product UI. Also follow `.cursor/skills/ui-kitchen-sink/SKILL.md` or `.claude/skills/ui-kitchen-sink/SKILL.md`, and `docs/04-standards/ui-accessibility.md`.
 
-- Route: `/kitchen-sink` or `/dev/kitchen-sink`
-- Catalog shared tokens + primitives (typography, buttons, forms, loading, feedback, navigation, overlays in scope)
+- One theme file for color, type, radius, shadow, and motion
+- Primitives in `src/client/components/ui/` (Button, Badge, Card, inputs, Table, PageHeader, EmptyState, and the rest of that list)
+- Route: `/kitchen-sink` or `/dev/kitchen-sink`, **importing and rendering** those primitives (one section each, variants/states, ~390px preview). Hand-rolled markup does not count
 - Note path/route in `docs/00-context/project.md`
 - Do not auto-launch UI/UX designer agents—instructions only
 

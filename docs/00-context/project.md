@@ -28,6 +28,7 @@
 - Backend layers: **controllers → services → repositories**.
 - When a layer folder grows, nest by domain (e.g. `repositories/billing/`).
 - Frontend never binds UI to raw API payloads—use adapters/mappers (`docs/02-architecture/data-mapping.md`).
+- UI: one theme file plus primitives in `src/client/components/ui/`. The kitchen sink renders those primitives. See `docs/04-standards/ui-architecture.md`.
 
 ## Major modules
 
@@ -89,4 +90,5 @@
 - Architecture: `docs/02-architecture/`
 - Features: `docs/03-features/`
 - Standards: `docs/04-standards/`
+- UI architecture: `docs/04-standards/ui-architecture.md`
 - Database: `docs/05-database/`

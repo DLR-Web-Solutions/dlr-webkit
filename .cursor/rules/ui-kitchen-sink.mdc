@@ -12,10 +12,12 @@ Before product UI (project init **or** any UI feature when none exists), create 
 1. Read and follow the project skill `.cursor/skills/ui-kitchen-sink/SKILL.md` (Claude Code: `.claude/skills/ui-kitchen-sink/SKILL.md`).
 2. On `/init` or first UI scaffolding: create the kitchen sink **before** product screens.
 3. On UI features: if no kitchen sink exists, create it first; if it exists, extend it when adding shared primitives/variants/states.
-4. Reuse kitchen-sink components and tokens in product UI—do not invent divergent one-offs.
-5. Instructions only—do **not** auto-launch UI/UX designer agents for this.
+4. Product pages import the same primitives the sink renders. Changing a primitive is what changes the sink and the pages.
+5. Applying a design: tokens, then primitives, then confirm the sink renders those primitives, then migrate pages. A sink-only restyle is incomplete.
+6. Instructions only—do **not** auto-launch UI/UX designer agents for this.
 
 ## Defaults
 
 - Route: `/kitchen-sink` (or `/dev/kitchen-sink`); document path in `docs/00-context/project.md`.
-- Also see `docs/04-standards/ui-accessibility.md`.
+- Structure, tokens, fonts, domain color, `lint:ui`: `docs/04-standards/ui-architecture.md`.
+- Accessibility: `docs/04-standards/ui-accessibility.md`.

@@ -14,6 +14,17 @@ bin/                # Automation scripts
 
 Do not place app packages at the repo root (`client/`, `server/`, etc.). Config, docs, scripts, and infrastructure stay at the root; source code stays in `src/<surface>/`.
 
+## Frontend UI
+
+```
+src/client/
+  styles/theme.css          # tokens: color, type, radius, shadow, motion (one file)
+  components/ui/            # shared primitives, one per file (Button, Table, …)
+  .../kitchen-sink/         # route /kitchen-sink — imports components/ui, does not reimplement them
+```
+
+Pages compose `components/ui`. Rules: `docs/04-standards/ui-architecture.md`.
+
 ## Preferred Backend Layering
 
 Inside each backend surface, organize as **Controllers → Services → Repositories** (do not dump business or data-access logic in controllers):
@@ -35,6 +46,7 @@ When a layer folder fills with related peers, nest by domain (e.g. `repositories
 
 ## Related architecture notes
 
+- UI architecture: `docs/04-standards/ui-architecture.md`
 - AI providers: `docs/02-architecture/ai-providers.md`
 - Jobs / webhooks: `docs/02-architecture/async-jobs-webhooks.md`
 - SaaS extension: `docs/02-architecture/saas-extension.md`

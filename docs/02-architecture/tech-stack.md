@@ -11,7 +11,7 @@
 - Architecture: Controllers → Services → Repositories (**default** backend split); domain-nest when crowded
 - Validation: Zod (**required** for JS/TS); React → react-hook-form + Zod
 - Frontend HTTP: Axios (**default** shared client)
-- Styling: Tailwind CSS + Radix UI / Shadcn (mobile-first, granular UI)
+- Styling: Tailwind CSS + Radix UI / Shadcn (mobile-first). One theme file, primitives in `src/client/components/ui/`, kitchen sink renders them — `docs/04-standards/ui-architecture.md`
 - UI/UX: Loading states required for async waits
 - Testing: Bun test or Vitest; Playwright for critical E2E
 - Tooling: Husky + lint-staged; `bun run doctor` + `bun run verify`

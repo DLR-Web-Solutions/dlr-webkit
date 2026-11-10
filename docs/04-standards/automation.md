@@ -46,6 +46,10 @@ Install with: `bun add -d husky lint-staged` and `"prepare": "husky"` in `packag
 
 ---
 
+## Optional app check: `lint:ui`
+
+`docs/04-standards/ui-architecture.md` includes a copy-paste `lint:ui` script (raw hex, tiny arbitrary type, off-palette utilities, `font-[var(` misuse). It is an example, not a kit script, and it is not listed in the registry above. When an application adopts it, copy the script to `bin/lint-ui.sh`, add a `"lint:ui"` package script, and add a row to the registry table.
+
 ## Script Creation Rules
 
 1. **Location:** All custom scripts must be stored in `bin/`.

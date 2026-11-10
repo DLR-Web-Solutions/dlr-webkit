@@ -94,8 +94,13 @@ These principles are strictly enforced across **all languages and frameworks**:
 
 ## 8. UI Layout
 
+Full contract: `docs/04-standards/ui-architecture.md`.
+
+- **Tokens:** Colors, type, radii, shadows, and motion live in one theme file. Pages use those semantic utilities. Raw hex and default-palette utilities (`text-slate-500`, `bg-emerald-100`, `text-[10px]`) do not belong in pages.
+- **Primitives:** Shared controls live in `src/client/components/ui/` (Button, Badge, Card, inputs, Table, PageHeader, EmptyState, and the rest of that list). Pages compose them. A new look goes into the primitive, not into a page-level `className`.
+- **Kitchen sink:** `/kitchen-sink` imports and renders those primitives, including a ~390px preview. Changing a primitive changes the sink and every page that uses it.
 - **Mobile-First:** Write base styles for mobile, then progressive enhancement via Tailwind breakpoints (`sm:`, `md:`, `lg:`). Touch targets, spacing, and navigation must work on small screens first.
-- **Granular UI:** Every UI surface must be composed of small, single-purpose components. Do not ship large monolithic page/view files—split layout, sections, forms, fields, and interactive pieces into dedicated components.
+- **Granular UI:** Every UI surface must be composed of small, single-purpose components. Do not ship large monolithic page/view files—split layout, sections, forms, fields, and interactive pieces into dedicated components. One primitive per file under `components/ui/`.
 - **Loading Components:** Always include a loading state when async work can delay feedback (page/data load, form submit, button actions). Prefer dedicated reusable loading/skeleton components; wire `aria-busy` / polite status text where appropriate.
 
 ## 9. Code Quality & Formatting Enforcement
