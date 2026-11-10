@@ -65,11 +65,15 @@ CLAUDE.md            # Short agent entry → .cursorrules + context
 .claude/skills/      # Claude Code project skills (e.g. /ui-kitchen-sink)
 ```
 
+## UI
+
+Product screens compose shared primitives. Tokens (color, type, radius, shadow, motion) live in one theme file; primitives live in `src/client/components/ui/`; the kitchen sink imports and renders those primitives. Rules: `docs/04-standards/ui-architecture.md`. Skill: `.cursor/skills/ui-kitchen-sink/SKILL.md` (Claude Code: `.claude/skills/ui-kitchen-sink/SKILL.md`).
+
 ## Agent hierarchy
 
 1. `docs/00-context/project.md` — what this app is
 2. `.cursorrules` — how to work (CLAUDE.md points here for Claude Code)
-3. `docs/04-standards/` — detailed standards
+3. `docs/04-standards/` — detailed standards (UI structure: `ui-architecture.md`)
 4. `prompts/` — task playbooks
 5. `.cursor/skills/` + `.claude/skills/` — tool-specific skills (same content; keep paired)
 

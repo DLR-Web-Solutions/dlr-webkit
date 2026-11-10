@@ -12,11 +12,15 @@
 
 ## UI / kitchen sink
 
-Before product UI (init **or** UI work when none exists), create/extend the kitchen sink and reuse it as the visual SSOT.
+Follow `docs/04-standards/ui-architecture.md`.
 
+Before product UI (init **or** UI work when none exists), create the kitchen sink and keep it as the render of the real primitives (`src/client/components/ui/`), not a hand-rolled catalog.
+
+- Applying a design: change tokens, then primitives, confirm the sink imports and renders them (variants, states, ~390px preview), then migrate pages. A sink-only restyle is incomplete.
+- On every UI change: did you change a primitive instead of restyling in the page?
 - Skill (Claude Code): `.claude/skills/ui-kitchen-sink/SKILL.md` — also `/ui-kitchen-sink`
 - Same content for Cursor: `.cursor/skills/ui-kitchen-sink/SKILL.md` (keep both in sync)
-- Standards: `docs/04-standards/ui-accessibility.md`
+- Accessibility: `docs/04-standards/ui-accessibility.md`
 - Instructions only—do not auto-launch UI/UX designer agents
 
 ## Git author
@@ -37,6 +41,7 @@ Commits in this repo must use **Joshua \<dev.joshuadolor@gmail.com\>**. See `doc
 - `bash bin/init.sh "Name"` → placeholder rename only
 - New feature → `prompts/01-new-feature.md`
 - Bug fix → `prompts/02-bug-fix.md`
+- UI architecture → `docs/04-standards/ui-architecture.md`
 - UI kitchen sink → `.claude/skills/ui-kitchen-sink/SKILL.md` (`/ui-kitchen-sink`)
 
 ## Diagnostics
