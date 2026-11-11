@@ -49,3 +49,10 @@ Return a stable JSON shape, e.g.:
 ## OpenAPI
 
 Add OpenAPI/Swagger **only** if the project has external API consumers or needs contract testing. Do not add it “for completeness.”
+
+## File uploads (images)
+
+- Treat every upload as untrusted; the backend is authoritative even when the frontend pre-checks for UX.
+- Validate MIME type, magic bytes, dimensions, and size server-side; reject anything that does not match the spec.
+- If an accepted image exceeds the allowed dimensions/size, automatically resize/compress it to the spec before storage; never store the oversized original.
+- Strip EXIF/metadata, sanitize filenames, and store via signed/controlled access (not directly in the web root). Scan uploads when the platform supports it.
