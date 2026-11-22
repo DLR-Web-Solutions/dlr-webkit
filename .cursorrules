@@ -71,6 +71,8 @@ UNDERSTAND → INSPECT → PLAN → TEST (red) → IMPLEMENT (green) → REFACTO
 6. Prefer scripts in `docs/04-standards/automation.md` / `bin/` over ad-hoc command chains.
 7. UI: one token file and shared primitives; the kitchen sink imports and renders them. Apply a design to tokens and primitives first — a sink-only restyle is incomplete. `docs/04-standards/ui-architecture.md`; rule `.cursor/rules/ui-kitchen-sink.mdc`; skills `.cursor/skills/ui-kitchen-sink/SKILL.md` and `.claude/skills/ui-kitchen-sink/SKILL.md`.
 8. Git author for this repo: `Joshua <dev.joshuadolor@gmail.com>` on every commit (see `docs/04-standards/git-conventions.md`).
+9. Forms: always require CSRF protection on state-changing requests.
+10. Flickering issues: fix the root cause (timing/state/layout); never paper over with `setTimeout(..., 0)`.
 
 ## Versions & dependencies
 

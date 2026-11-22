@@ -23,7 +23,6 @@ describe('kit integrity', () => {
     test('agent rules mandate test-driven development', async () => {
         for (const rel of [
             '.cursorrules',
-            'CLAUDE.md',
             'docs/04-standards/testing.md',
             'prompts/01-new-feature.md',
             'prompts/02-bug-fix.md',

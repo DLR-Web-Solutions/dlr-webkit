@@ -27,10 +27,14 @@ All behavior changes follow **TDD: RED → GREEN → REFACTOR**.
 ## Rules for agents
 
 1. Meaningful behavior changes require tests (bug fixes → regression test when non-trivial).
-2. Do not claim completion until `bin/verify` passes.
-3. Prefer fast unit tests near the changed module; reserve E2E for flows that break silently otherwise.
-4. Never weaken auth, validation, or CSRF protections to make a test pass.
-5. Tests must not require production secrets; use `.env.test` or inline test config.
+2. **Break down large features into phases** with clear deliverables per phase.
+3. **ALWAYS update docs** for any changes (feature docs, project context, API conventions, etc.).
+4. **Board workflow:** If a project board exists, create a ticket first, assign yourself (or the appropriate person), then move to "In Progress" before starting.
+5. **QA verification:** Always ask a QA agent to verify the work before marking complete.
+6. Do not claim completion until `bin/verify` passes.
+7. Prefer fast unit tests near the changed module; reserve E2E for flows that break silently otherwise.
+8. Never weaken auth, validation, or CSRF protections to make a test pass.
+9. Tests must not require production secrets; use `.env.test` or inline test config.
 
 ## Layout
 

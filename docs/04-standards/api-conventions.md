@@ -36,10 +36,14 @@ Return a stable JSON shape, e.g.:
 - Authorize by role/permission/ownership inside services or dedicated policies—never UI-only.
 - Prefer HttpOnly, Secure, SameSite cookies for browser sessions.
 
-## Pagination
+## Pagination, sorting, filtering, and search
 
-- Consistent list envelope (see `docs/02-architecture/data-mapping.md` collection pattern).
+- When data needs to be displayed in lists, always implement pagination, sorting, filtering, and search capabilities to ensure good performance and usability.
+- Pagination: Consistent list envelope (see `docs/02-architecture/data-mapping.md` collection pattern).
 - Default conservative `per_page` limits; cap maximums server-side.
+- Sorting: Support sorting by relevant fields with clear sort direction indicators.
+- Filtering: Allow filtering on relevant fields with consistent UI patterns.
+- Search: Implement search functionality for full-text search across relevant fields.
 
 ## Idempotency & rate limits
 

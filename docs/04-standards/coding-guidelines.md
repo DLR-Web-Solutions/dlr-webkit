@@ -102,6 +102,7 @@ Full contract: `docs/04-standards/ui-architecture.md`.
 - **Mobile-First:** Write base styles for mobile, then progressive enhancement via Tailwind breakpoints (`sm:`, `md:`, `lg:`). Touch targets, spacing, and navigation must work on small screens first.
 - **Granular UI:** Every UI surface must be composed of small, single-purpose components. Do not ship large monolithic page/view files—split layout, sections, forms, fields, and interactive pieces into dedicated components. One primitive per file under `components/ui/`.
 - **Loading Components:** Always include a loading state when async work can delay feedback (page/data load, form submit, button actions). Prefer dedicated reusable loading/skeleton components; wire `aria-busy` / polite status text where appropriate.
+- **Data Display:** When displaying lists of data, always implement pagination, sorting, filtering, and search capabilities on the frontend to ensure good performance and usability. Use consistent UI patterns for these features across the application.
 
 ## 9. Code Quality & Formatting Enforcement
 
