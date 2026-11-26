@@ -19,8 +19,8 @@ These principles are strictly enforced across **all languages and frameworks**:
     - **Liskov Substitution (LSP):** Subtypes must be completely substitutable for base types.
     - **Interface Segregation (ISP):** Prefer small, focused interfaces over large general-purpose ones.
     - **Dependency Inversion (DIP):** Depend on abstractions (interfaces/contracts), not concrete implementations.
-- **DRY (Don't Repeat Yourself):** Consolidate repeated validation rules, utility functions, API calls, and business logic into shared services, actions, or helpers. Refactor duplicated logic upon its third occurrence.
-- **KISS (Keep It Simple, Stupid):** Write explicit, readable code over clever or overly abstract implementations. Avoid speculative over-engineering.
+- **DRY (Don't Repeat Yourself) — always:** Consolidate repeated validation rules, utility functions, API calls, and business logic into shared services, actions, or helpers. Refactor duplicated logic upon its third occurrence.
+- **KISS (Keep It Simple, Stupid) — always:** Write explicit, readable code over clever or overly abstract implementations. Avoid speculative over-engineering.
 
 ---
 

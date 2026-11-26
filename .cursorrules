@@ -27,6 +27,12 @@ UNDERSTAND → INSPECT → PLAN → TEST (red) → IMPLEMENT (green) → REFACTO
 - **Exceptions only:** throwaway spikes, pure docs/config, or genuinely untestable glue. State the exception; convert a spike to TDD before keeping it.
 - If a test is hard to write, redesign the seam (dependency injection, smaller functions) instead of skipping TDD.
 
+### Subagents
+
+- Spawn subagents when a task is large or splits into many independent pieces.
+- Each subagent runs **only the tests related to its own changes**—never the full suite. The parent agent runs `bun run verify` once at the end.
+- Give each subagent its scope, files, and relevant test command; avoid overlapping edits.
+
 ### Hard prohibitions
 
 - Do not modify unrelated code or introduce unnecessary dependencies.
@@ -73,6 +79,7 @@ UNDERSTAND → INSPECT → PLAN → TEST (red) → IMPLEMENT (green) → REFACTO
 8. Git author for this repo: `Joshua <dev.joshuadolor@gmail.com>` on every commit (see `docs/04-standards/git-conventions.md`).
 9. Forms: always require CSRF protection on state-changing requests.
 10. Flickering issues: fix the root cause (timing/state/layout); never paper over with `setTimeout(..., 0)`.
+11. Always practice **DRY** (consolidate repetition; refactor on the third occurrence) and **KISS** (explicit, simple code over clever abstraction).
 
 ## Versions & dependencies
 

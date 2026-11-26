@@ -24,6 +24,12 @@ All behavior changes follow **TDD: RED → GREEN → REFACTOR**.
 | API         | HTTP handlers: authz, validation errors, happy paths             | supertest/fetch against app server or Vitest |
 | E2E         | Critical user journeys only                                      | Playwright                                   |
 
+## E2E side effects (SMS / email)
+
+- E2E tests must **never send real SMS or email**.
+- Verify sends through captured **logs** or test doubles (mail/SMS log sink); do not call live providers that consume quota or credits.
+- If a journey needs provider integration, mock or queue it and assert the queued/logged payload.
+
 ## Rules for agents
 
 1. Meaningful behavior changes require tests (bug fixes → regression test when non-trivial).
@@ -31,10 +37,11 @@ All behavior changes follow **TDD: RED → GREEN → REFACTOR**.
 3. **ALWAYS update docs** for any changes (feature docs, project context, API conventions, etc.).
 4. **Board workflow:** If a project board exists, create a ticket first, assign yourself (or the appropriate person), then move to "In Progress" before starting.
 5. **QA verification:** Always ask a QA agent to verify the work before marking complete.
-6. Do not claim completion until `bin/verify` passes.
-7. Prefer fast unit tests near the changed module; reserve E2E for flows that break silently otherwise.
-8. Never weaken auth, validation, or CSRF protections to make a test pass.
-9. Tests must not require production secrets; use `.env.test` or inline test config.
+6. **Subagents:** Spawn them for large or parallelizable work. Each subagent runs only tests related to its own changes—never the full suite. The parent runs `bin/verify` once at the end.
+7. Do not claim completion until `bin/verify` passes.
+8. Prefer fast unit tests near the changed module; reserve E2E for flows that break silently otherwise.
+9. Never weaken auth, validation, or CSRF protections to make a test pass.
+10. Tests must not require production secrets; use `.env.test` or inline test config.
 
 ## Layout
 
