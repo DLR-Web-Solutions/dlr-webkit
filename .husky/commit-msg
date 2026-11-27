@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+bin/docs-check --staged --message-file "$1"

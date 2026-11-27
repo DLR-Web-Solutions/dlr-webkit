@@ -7,6 +7,7 @@ import {
     writeFileSync,
     existsSync,
     cpSync,
+    statSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -128,6 +129,7 @@ describe('bin/install.sh', () => {
                 'bin/verify.sh',
                 'bin/init.sh',
                 'bin/install.sh',
+                'bin/docs-check',
             ]) {
                 cpSync(join(root, rel), join(kit, rel));
             }
@@ -141,6 +143,10 @@ describe('bin/install.sh', () => {
             writeFileSync(join(kit, '.cursorrules'), 'rules\n');
             writeFileSync(join(kit, '.env.example'), 'APP_PORT=8000\n');
             writeFileSync(join(kit, '.husky/pre-commit'), 'bunx lint-staged\n');
+            writeFileSync(
+                join(kit, '.husky/commit-msg'),
+                '#!/usr/bin/env sh\nbin/docs-check --staged --message-file "$1"\n',
+            );
             writeFileSync(join(kit, '.github/workflows/ci.yml'), 'name: CI\n');
             writeFileSync(join(kit, '.vscode/settings.json'), '{}\n');
             writeFileSync(join(kit, '.cursor/mcp.json'), '{}\n');
@@ -193,6 +199,14 @@ describe('bin/install.sh', () => {
             ).toContain('OverlayApp');
             expect(existsSync(join(parent, 'bin/doctor.sh'))).toBe(true);
             expect(existsSync(join(parent, '.env'))).toBe(false);
+            expect(existsSync(join(parent, 'bin/docs-check'))).toBe(true);
+            expect(existsSync(join(parent, '.husky/commit-msg'))).toBe(true);
+            expect(
+                statSync(join(parent, 'bin/docs-check')).mode & 0o111,
+            ).not.toBe(0);
+            expect(
+                statSync(join(parent, '.husky/commit-msg')).mode & 0o111,
+            ).not.toBe(0);
             expect(existsSync(kit)).toBe(true); // remove default N
         } finally {
             rmSync(parent, { recursive: true, force: true });

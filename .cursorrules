@@ -16,7 +16,7 @@ UNDERSTAND → INSPECT → PLAN → TEST (red) → IMPLEMENT (green) → REFACTO
 6. **REFACTOR** — Clean up while keeping the suite green.
 7. **VERIFY** — Run `bun run verify` (or `bash bin/verify.sh`). Incomplete until it passes.
 8. **REVIEW** — Diff for unrelated edits, secrets, weakened security, invented APIs/schemas.
-9. **DOCUMENT** — Update project context / feature docs only when contracts or architecture change.
+9. **DOCUMENT** — Update project context / feature docs whenever a change makes them untrue. The `commit-msg` hook runs `bin/docs-check`: business paths (`src/`, `deploy/`, `bin/`, `scripts/`, `.github/workflows/`) require a `docs/` change. `[no-docs]` in the commit message (with the reason in the body) is the only escape.
 
 ### Test-driven development (mandatory)
 

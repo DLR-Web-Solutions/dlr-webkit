@@ -10,6 +10,10 @@
 2. Read `.cursorrules` — it is the single source of truth for all coding rules, workflow, and standards.
 3. Inspect existing code under `src/`—reuse before inventing.
 
+## Docs gate
+
+`bin/docs-check` runs from `.husky/commit-msg` and CI. Business paths (`src/`, `deploy/`, `bin/`, `scripts/`, `.github/workflows/`) require a `docs/` update; `[no-docs]` in the commit message (with the reason in the body) is the only escape. See `.cursorrules` DOCUMENT step and `docs/README.md`.
+
 ## UI / kitchen sink
 
 Follow `.cursorrules` and `docs/04-standards/ui-architecture.md`.  

@@ -99,9 +99,11 @@ copy_dir_merge "$DEVKIT_DIR/bin" "$PARENT_DIR/bin"
 # husky: only merge tracked hook scripts, not generated _
 if [ -d "$DEVKIT_DIR/.husky" ]; then
   mkdir -p "$PARENT_DIR/.husky"
-  if [ -f "$DEVKIT_DIR/.husky/pre-commit" ]; then
-    copy_file "$DEVKIT_DIR/.husky/pre-commit" "$PARENT_DIR/.husky/pre-commit"
-  fi
+  for hook in pre-commit commit-msg; do
+    if [ -f "$DEVKIT_DIR/.husky/$hook" ]; then
+      copy_file "$DEVKIT_DIR/.husky/$hook" "$PARENT_DIR/.husky/$hook"
+    fi
+  done
 fi
 copy_dir_merge "$DEVKIT_DIR/.github" "$PARENT_DIR/.github"
 copy_dir_merge "$DEVKIT_DIR/.vscode" "$PARENT_DIR/.vscode"
@@ -172,6 +174,12 @@ replace_placeholder docs
 [ -f README.md ] && replace_placeholder README.md
 
 chmod +x bin/*.sh 2>/dev/null || true
+if [ -f bin/docs-check ]; then
+  chmod +x bin/docs-check
+fi
+if [ -f .husky/commit-msg ]; then
+  chmod +x .husky/commit-msg
+fi
 
 echo "✨ DevKit files placed in '$PARENT_FOLDER_NAME'."
 echo "Next: copy .env.example → .env, run bun install, then bun run doctor."

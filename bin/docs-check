@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+# name: docs-check
+# what: Blocks business-code changes that do not include a docs/ update.
+# usage: bin/docs-check [--staged] [--range <rev>] [--message-file <file>]
+# when: commit-msg hook and CI; before committing changes under business paths.
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: bin/docs-check [--staged] [--range <rev>] [--message-file <file>]
+
+Modes:
+  --staged                Check staged changes (default).
+  --range <rev>           Check a revision. If <rev> contains "..", runs
+                          git diff --name-only <rev>; otherwise compares
+                          <rev>...HEAD. Falls back to HEAD^ HEAD when the
+                          revision is missing, all zeros, or the diff fails.
+  --message-file <file>   Allow the [no-docs] escape when the file contains it.
+  -h, --help              Show this help.
+
+Business paths: src/, deploy/, bin/, scripts/, .github/workflows/.
+A business change must include a docs/ file, or the commit message must
+contain [no-docs] with the reason in the body.
+EOF
+}
+
+MODE="staged"
+RANGE=""
+MESSAGE_FILE=""
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --staged)
+      MODE="staged"
+      ;;
+    --range)
+      if [ "$#" -lt 2 ]; then
+        echo "docs-check: --range requires a revision" >&2
+        exit 2
+      fi
+      MODE="range"
+      RANGE="$2"
+      shift
+      ;;
+    --message-file)
+      if [ "$#" -lt 2 ]; then
+        echo "docs-check: --message-file requires a path" >&2
+        exit 2
+      fi
+      MESSAGE_FILE="$2"
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "docs-check: unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
+
+ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+if [ -z "$ROOT_DIR" ]; then
+  echo "docs-check: not inside a git repository" >&2
+  exit 1
+fi
+cd "$ROOT_DIR"
+
+# Single place to extend the paths that require a docs decision.
+is_business() {
+  case "$1" in
+    src/*|deploy/*|bin/*|scripts/*|.github/workflows/*)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+diff_fallback() {
+  git diff --name-only HEAD^ HEAD 2>/dev/null || true
+}
+
+changed_files() {
+  if [ "$MODE" = "staged" ]; then
+    git diff --cached --name-only --diff-filter=ACMR
+    return 0
+  fi
+
+  if [ -z "$RANGE" ] || [[ "$RANGE" =~ ^0+$ ]]; then
+    diff_fallback
+    return 0
+  fi
+
+  if [[ "$RANGE" == *".."* ]]; then
+    if git diff --name-only "$RANGE" 2>/dev/null; then
+      return 0
+    fi
+  elif git diff --name-only "$RANGE"...HEAD 2>/dev/null; then
+    return 0
+  fi
+
+  diff_fallback
+}
+
+files="$(changed_files)"
+
+business=()
+has_docs=0
+
+while IFS= read -r file; do
+  [ -z "$file" ] && continue
+  if is_business "$file"; then
+    business+=("$file")
+  fi
+  case "$file" in
+    docs/*)
+      has_docs=1
+      ;;
+  esac
+done <<<"$files"
+
+# No business files: nothing to decide.
+if [ "${#business[@]}" -eq 0 ]; then
+  exit 0
+fi
+
+# A docs change in the same diff satisfies the gate.
+if [ "$has_docs" -eq 1 ]; then
+  exit 0
+fi
+
+# Explicit escape: [no-docs] in the commit message.
+if [ -n "$MESSAGE_FILE" ] && [ -f "$MESSAGE_FILE" ] &&
+  grep -qi '\[no-docs\]' "$MESSAGE_FILE"; then
+  echo "docs-check: skipped ([no-docs] in the message)"
+  exit 0
+fi
+
+echo "✖ docs-check: this change touches business code but no docs/ file." >&2
+shown=0
+for file in "${business[@]}"; do
+  if [ "$shown" -ge 10 ]; then
+    break
+  fi
+  echo "  $file" >&2
+  shown=$((shown + 1))
+done
+echo "Update the matching doc (map: docs/README.md), or add [no-docs] to the commit" >&2
+echo "message and say why in the body." >&2
+exit 1

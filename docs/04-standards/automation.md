@@ -6,12 +6,13 @@
 
 ## Registered Utility Scripts
 
-| Script Path      | Description                                      | When to Run                                          |
-| :--------------- | :----------------------------------------------- | :--------------------------------------------------- |
-| `bin/install.sh` | Overlays kit files into the parent directory     | Bootstrap a new project from a nested kit clone      |
-| `bin/init.sh`    | Replaces `[APP_NAME]` placeholders in docs/rules | First-time naming                                    |
-| `bin/doctor.sh`  | Diagnoses runtime, env, docker, hooks, kit files | Setup issues; before debugging “works on my machine” |
-| `bin/verify.sh`  | Format, lint, typecheck, tests, audit (+ doctor) | Before claiming a feature/fix complete; CI           |
+| Script Path      | Description                                        | When to Run                                          |
+| :--------------- | :------------------------------------------------- | :--------------------------------------------------- |
+| `bin/install.sh` | Overlays kit files into the parent directory       | Bootstrap a new project from a nested kit clone      |
+| `bin/init.sh`    | Replaces `[APP_NAME]` placeholders in docs/rules   | First-time naming                                    |
+| `bin/doctor.sh`  | Diagnoses runtime, env, docker, hooks, kit files   | Setup issues; before debugging “works on my machine” |
+| `bin/verify.sh`  | Format, lint, typecheck, tests, audit (+ doctor)   | Before claiming a feature/fix complete; CI           |
+| `bin/docs-check` | Blocks business-code changes without a docs update | `commit-msg` hook; CI before merge                   |
 
 Package shortcuts (when `package.json` is present):
 
@@ -40,6 +41,7 @@ When scaffolding or bootstrapping a JS/TS app from this kit, ensure:
 | `husky`              | Git hooks                                   |
 | `lint-staged`        | Run linters/formatters on staged files only |
 | `.husky/pre-commit`  | Runs `bunx lint-staged`                     |
+| `.husky/commit-msg`  | Runs `bin/docs-check` on the staged diff    |
 | `.lintstagedrc.json` | Maps globs → `eslint` / `prettier` / `pint` |
 
 Install with: `bun add -d husky lint-staged` and `"prepare": "husky"` in `package.json`.
@@ -58,3 +60,4 @@ Install with: `bun add -d husky lint-staged` and `"prepare": "husky"` in `packag
 4. **Registry Update:** Every newly generated script MUST be added to the table above.
 5. **No duplicates:** Improve an existing script before adding a parallel one.
 6. **Safety:** Quote variables; never `rm -rf` without an explicit confirmed path; never print `.env` secrets; install preserves existing files unless `DLR_FORCE_OVERWRITE=1`.
+7. **Docs gate:** `bin/docs-check` requires a `docs/` change when the diff touches `src/`, `deploy/`, `bin/`, `scripts/`, or `.github/workflows/`. `[no-docs]` in the commit message (with the reason in the body) is the only escape, and only for pure refactors, test-only changes, or tooling that cannot make a doc untrue.
