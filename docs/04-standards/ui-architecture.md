@@ -13,13 +13,13 @@ Colors, type, radii, shadows, and motion are defined once, as CSS variables and 
 - Tailwind v4: `@theme` in one CSS file, e.g. `src/client/styles/theme.css`
 - Tailwind v3: `theme.extend` in `tailwind.config.ts`, still backed by those CSS variables
 
-Pages and feature components use the semantic utilities that read the theme (`bg-surface`, `text-muted`, `text-destructive`, `rounded-md`, `shadow-sm`).
+Pages and feature components use the semantic utilities that read the theme (`bg-surface`, `text-muted`, `text-destructive`, `rounded-md`, `shadow-sm`). Because the primitives and pages read these tokens, a theme change is a one-file edit.
 
 Raw hex, `rgb()` / `hsl()`, and default-palette utilities (`bg-[#…]`, `text-slate-500`, `bg-emerald-100`, `bg-white`, `text-black`) stay out of pages, feature components, and the kitchen sink. Literals live in the token file. Shadcn or Radix variables, when you use them, **are** that file — extend them; do not start a second palette.
 
 ## 2. Primitives — one folder
 
-Shared controls live in `src/client/components/ui/` (one primitive per file; adjust the surface name if the client is not `client`):
+Shared controls live in `src/client/components/ui/` (one primitive per file; adjust the surface name if the client is not `client`). Each primitive has exactly one implementation file: change it there once and the kitchen sink plus every page that imports it update automatically.
 
 | Primitive        | Role                                                    |
 | :--------------- | :------------------------------------------------------ |

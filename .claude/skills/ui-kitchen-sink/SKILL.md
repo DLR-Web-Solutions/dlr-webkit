@@ -70,6 +70,7 @@ Skip sections only when that primitive is out of scope for the product. When a p
 ## Rules of use
 
 - Kitchen sink is the **look SSOT** because it renders the primitives. Product screens import those same components and tokens.
+- Each primitive has exactly one implementation file. Change it there once; the sink and every page that imports it update, so theme and component changes stay a one-file edit.
 - Prefer granular, reusable components over page-local one-offs.
 - Every interactive control needs keyboard access, focus rings, and loading/disabled states where async work exists.
 - Forms: `noValidate`; Zod (+ react-hook-form in React); custom accessible errors—never native browser validation UI.

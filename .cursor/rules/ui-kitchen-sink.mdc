@@ -12,7 +12,7 @@ Before product UI (project init **or** any UI feature when none exists), create 
 1. Read and follow the project skill `.cursor/skills/ui-kitchen-sink/SKILL.md` (Claude Code: `.claude/skills/ui-kitchen-sink/SKILL.md`).
 2. On `/init` or first UI scaffolding: create the kitchen sink **before** product screens.
 3. On UI features: if no kitchen sink exists, create it first; if it exists, extend it when adding shared primitives/variants/states.
-4. Product pages import the same primitives the sink renders. Changing a primitive is what changes the sink and the pages.
+4. Product pages import the same primitives the sink renders. Each primitive lives in one implementation file; edit it once there and the sink plus every page update.
 5. Applying a design: tokens, then primitives, then confirm the sink renders those primitives, then migrate pages. A sink-only restyle is incomplete.
 6. Instructions only—do **not** auto-launch UI/UX designer agents for this.
 
