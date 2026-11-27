@@ -162,6 +162,11 @@ describe('bin/install.sh', () => {
             writeFileSync(join(kit, 'Dockerfile'), 'FROM scratch\n');
             writeFileSync(join(kit, '.gitignore'), '.env\n');
             writeFileSync(join(kit, 'README.md'), 'kit readme\n');
+            writeFileSync(
+                join(kit, 'package.json'),
+                '{"name":"kit","scripts":{"prepare":"husky"}}\n',
+            );
+            writeFileSync(join(kit, 'bun.lock'), '\n');
 
             // Pre-existing consumer files that must be preserved
             writeFileSync(join(parent, 'README.md'), 'KEEP_README\n');
@@ -201,6 +206,8 @@ describe('bin/install.sh', () => {
             expect(existsSync(join(parent, '.env'))).toBe(false);
             expect(existsSync(join(parent, 'bin/docs-check'))).toBe(true);
             expect(existsSync(join(parent, '.husky/commit-msg'))).toBe(true);
+            expect(existsSync(join(parent, 'package.json'))).toBe(true);
+            expect(existsSync(join(parent, 'bun.lock'))).toBe(true);
             expect(
                 statSync(join(parent, 'bin/docs-check')).mode & 0o111,
             ).not.toBe(0);

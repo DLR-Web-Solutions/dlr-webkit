@@ -133,6 +133,17 @@ copy_file "$DEVKIT_DIR/Dockerfile" "$PARENT_DIR/Dockerfile"
 copy_file "$DEVKIT_DIR/.env.example" "$PARENT_DIR/.env.example"
 # Never copy .env
 
+# Fresh projects need a manifest so `bun install` can activate husky.
+# Existing projects keep their own package.json and lockfile.
+if [ ! -f "$PARENT_DIR/package.json" ] && [ -f "$DEVKIT_DIR/package.json" ]; then
+  cp "$DEVKIT_DIR/package.json" "$PARENT_DIR/package.json"
+  echo "  · package.json"
+  if [ -f "$DEVKIT_DIR/bun.lock" ]; then
+    cp "$DEVKIT_DIR/bun.lock" "$PARENT_DIR/bun.lock"
+    echo "  · bun.lock"
+  fi
+fi
+
 if [ -f "$DEVKIT_DIR/.gitignore" ]; then
   if [ ! -f "$PARENT_DIR/.gitignore" ]; then
     cp "$DEVKIT_DIR/.gitignore" "$PARENT_DIR/.gitignore"

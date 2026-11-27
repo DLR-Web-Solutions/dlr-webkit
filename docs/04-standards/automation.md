@@ -46,6 +46,8 @@ When scaffolding or bootstrapping a JS/TS app from this kit, ensure:
 
 Install with: `bun add -d husky lint-staged` and `"prepare": "husky"` in `package.json`.
 
+Fresh overlays seed `package.json` and `bun.lock` when the target has none, so `bun install` can activate husky. Existing projects keep their own manifest and lockfile.
+
 ---
 
 ## Optional app check: `lint:ui`

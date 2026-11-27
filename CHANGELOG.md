@@ -16,7 +16,7 @@ All notable kit changes. This kit ships rules, scripts, and docs into consumer p
 ### Changed
 
 - `.cursorrules`, `CLAUDE.md`, and `docs/04-standards/automation.md` document the gate, business paths, and `[no-docs]` rules.
-- `bin/install.sh` copies and chmods `bin/docs-check` and `.husky/commit-msg`.
+- `bin/install.sh` copies and chmods `bin/docs-check` and `.husky/commit-msg`; fresh targets also get `package.json` and `bun.lock` so `bun install` can activate husky.
 - CI checkout uses `fetch-depth: 0`; the verify job runs `bin/docs-check` on the pushed range.
 - Refreshed `eslint`, `@eslint/js`, and `typescript-eslint` to stable releases using `minimatch` 11, clearing the audit advisory.
 - Package version bumped to `0.3.0`.
